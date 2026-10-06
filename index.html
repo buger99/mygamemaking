@@ -3,91 +3,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌈 나를 소개합니다! 🌈</title>
-  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+  <title>정한별 자기소개</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* 사이버펑크 네온 팔레트 */
+      --cp-night: #07040f;
+      --cp-yellow: #fcee0a;
+      --cp-cyan: #00f0ff;
+      --cp-pink: #ff2a6d;
+      --cp-purple: #7a1fa2;
+      color-scheme: dark;
+    }
 
     body {
       font-family: 'Gaegu', 'Jua', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(to bottom, #0b0f2e 0%, #1b1550 45%, #4a2a7a 75%, #c0587e 100%);
-      background-attachment: fixed;
+      background: var(--cp-night);
       overflow-x: hidden;
       color: #333;
     }
 
-    /* 🌃 도시 야경 배경 */
-    .night {
+    /* 🌆 사이버펑크 도시 배경 */
+    .city {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
+      background:
+        radial-gradient(ellipse 70% 45% at 75% 85%, rgba(255, 42, 109, 0.55), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 15% 70%, rgba(0, 240, 255, 0.25), transparent 70%),
+        radial-gradient(ellipse 50% 30% at 50% 100%, rgba(252, 238, 10, 0.25), transparent 70%),
+        linear-gradient(to bottom, #07040f 0%, #160828 40%, #3a0b3f 70%, #5c0f3a 100%);
     }
 
-    .star {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: white;
-      animation: twinkle ease-in-out infinite;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2; }
-      50%      { opacity: 1; }
-    }
-
-    .moon {
-      position: absolute;
-      top: 6%;
-      right: 8%;
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #fffbe0, #ffe9a3 60%, #f5d26b);
-      box-shadow: 0 0 40px 12px rgba(255, 236, 160, 0.45);
-    }
-
+    /* 멀리 있는 빌딩 (흐릿한 보라 실루엣) */
     .skyline {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      height: 38vh;
       display: flex;
       align-items: flex-end;
-      gap: 4px;
     }
 
-    .building {
+    .skyline.far  { height: 70vh; gap: 2px; opacity: 0.55; }
+    .skyline.near { height: 48vh; gap: 6px; }
+
+    .far .building {
       flex: 1;
-      background: #120d2b;
-      border-top: 2px solid #2b2160;
+      background: linear-gradient(to top, #2a0d3d, #1a0a2e);
+    }
+
+    /* 가까운 빌딩 (네온 테두리 + 창문) */
+    .near .building {
+      flex: 1;
+      position: relative;
+      background: #0b0616;
+      border-top: 2px solid var(--edge);
+      box-shadow: 0 -4px 18px -6px var(--edge);
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      padding: 10px 6px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      padding: 12px 6px;
       align-content: start;
     }
 
     .window {
-      height: 8px;
-      border-radius: 1px;
-      background: #241b4d;
+      height: 5px;
+      background: #1a1030;
     }
 
     .window.on {
-      background: #ffd966;
-      box-shadow: 0 0 6px #ffcc33;
-      animation: flicker 6s ease-in-out infinite;
+      background: var(--glow);
+      box-shadow: 0 0 6px var(--glow);
+      animation: flicker 5s steps(1) infinite;
     }
 
     @keyframes flicker {
-      0%, 92%, 100% { opacity: 1; }
-      95%           { opacity: 0.4; }
+      0%, 88%, 100% { opacity: 1; }
+      90%, 94%      { opacity: 0.25; }
+    }
+
+    /* 세로 네온 간판 */
+    .sign {
+      position: absolute;
+      top: 18%;
+      left: 50%;
+      transform: translateX(-50%);
+      writing-mode: vertical-rl;
+      font-family: 'Jua', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      padding: 10px 4px;
+      color: var(--glow);
+      border: 2px solid var(--glow);
+      background: rgba(7, 4, 15, 0.85);
+      text-shadow: 0 0 6px var(--glow), 0 0 16px var(--glow);
+      box-shadow: 0 0 12px var(--glow), inset 0 0 10px var(--glow);
+      animation: signFlicker 4s steps(1) infinite;
+      z-index: 1;
+    }
+
+    @keyframes signFlicker {
+      0%, 70%, 74%, 100% { opacity: 1; }
+      72%                { opacity: 0.2; }
+      73%                { opacity: 0.8; }
+    }
+
+    /* 하늘을 가로지르는 비행 차량 불빛 */
+    .car {
+      position: absolute;
+      left: -120px;
+      width: 90px;
+      height: 3px;
+      border-radius: 3px;
+      background: linear-gradient(to right, transparent, var(--glow));
+      box-shadow: 0 0 10px var(--glow);
+      animation: fly linear infinite;
+    }
+
+    .car.reverse {
+      background: linear-gradient(to left, transparent, var(--glow));
+      animation-name: flyBack;
+    }
+
+    @keyframes fly     { from { transform: translateX(0); }      to { transform: translateX(calc(100vw + 240px)); } }
+    @keyframes flyBack { from { transform: translateX(calc(100vw + 240px)); } to { transform: translateX(0); } }
+
+    /* 비 */
+    #rain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 화면 주사선 + 글리치 */
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0 1px, transparent 1px 3px);
+    }
+
+    .glitch-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--cp-cyan), var(--cp-pink), var(--cp-yellow));
+      mix-blend-mode: screen;
+      opacity: 0;
+      animation: glitch 7s steps(1) infinite;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { opacity: 0; top: 30%; }
+      91%           { opacity: 0.8; top: 32%; transform: translateX(-20px); }
+      93%           { opacity: 0.6; top: 61%; transform: translateX(30px); height: 2px; }
+      95%           { opacity: 0.9; top: 45%; transform: translateX(-8px); height: 10px; }
     }
 
     /* 배경에 둥둥 떠다니는 이모지 */
@@ -119,7 +196,7 @@
       border-radius: 32px;
       padding: 40px 24px;
       text-align: center;
-      box-shadow: 0 12px 0 #ff6b9d, 0 0 40px rgba(255, 107, 157, 0.6);
+      box-shadow: 0 12px 0 #ff6b9d, 0 0 40px rgba(255, 42, 109, 0.7), 0 0 80px rgba(0, 240, 255, 0.25);
       border: 5px solid #ff6b9d;
       margin-bottom: 40px;
     }
@@ -177,7 +254,8 @@
       font-size: 2.2rem;
       text-align: center;
       color: white;
-      text-shadow: 0 0 10px #f093fb, 0 0 22px #a16bfe;
+      color: var(--cp-yellow);
+      text-shadow: 3px 0 0 var(--cp-pink), -3px 0 0 var(--cp-cyan), 0 0 18px rgba(252, 238, 10, 0.6);
       margin-bottom: 24px;
     }
 
@@ -308,6 +386,73 @@
       margin-right: auto;
     }
 
+    [hidden] { display: none !important; }
+
+    /* 👋 반가워! 알림 창 */
+    .popup-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: rgba(7, 4, 15, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .popup {
+      background: #0b0616;
+      border: 3px solid var(--cp-yellow);
+      box-shadow: 0 0 24px rgba(252, 238, 10, 0.6), 6px 6px 0 var(--cp-pink);
+      clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+      padding: 32px 28px;
+      text-align: center;
+      width: min(360px, 100%);
+      animation: popIn 0.25s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-tag {
+      font-family: 'Orbitron', 'Jua', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: var(--cp-cyan);
+    }
+
+    .popup-msg {
+      font-family: 'Jua', sans-serif;
+      font-size: 2.4rem;
+      color: var(--cp-yellow);
+      text-shadow: 2px 0 0 var(--cp-pink), -2px 0 0 var(--cp-cyan);
+      margin: 12px 0 20px;
+    }
+
+    .popup-close {
+      font-family: 'Jua', sans-serif;
+      font-size: 1.3rem;
+      padding: 10px 36px;
+      border: none;
+      background: var(--cp-yellow);
+      color: #0b0616;
+      cursor: pointer;
+      clip-path: polygon(0 0, 100% 0, 100% 70%, 88% 100%, 0 100%);
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--cp-cyan);
+      outline-offset: 4px;
+    }
+
+    /* 움직임 줄이기 설정을 켠 사람을 위해 */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; }
+      #rain, .floating, .car { display: none; }
+    }
+
     /* 📱 모바일 화면 */
     @media (max-width: 600px) {
       .container { padding: 24px 16px 40px; }
@@ -324,20 +469,25 @@
       .facts li { font-size: 1.2rem; }
       .btn-area { flex-direction: column; gap: 16px; }
       .party-btn { width: 100%; font-size: 1.4rem; padding: 14px 20px; }
-      .moon { width: 56px; height: 56px; top: 3%; }
-      .skyline { height: 26vh; gap: 2px; }
-      .building { gap: 4px; padding: 6px 3px; }
-      .window { height: 5px; }
+      .skyline.near { height: 34vh; gap: 3px; }
+      .near .building { gap: 3px; padding: 8px 3px; grid-template-columns: repeat(3, 1fr); }
+      .window { height: 4px; }
+      .sign { font-size: 0.95rem; padding: 6px 2px; }
+      .car { width: 60px; }
+      .popup-msg { font-size: 2rem; }
       .floating { font-size: 1.3rem !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🌃 도시 야경 -->
-  <div class="night" id="night">
-    <div class="moon"></div>
-    <div class="skyline" id="skyline"></div>
+  <!-- 🌆 사이버펑크 도시 -->
+  <div class="city" id="city">
+    <div class="skyline far" id="farSkyline"></div>
+    <canvas id="rain"></canvas>
+    <div class="skyline near" id="nearSkyline"></div>
+    <div class="scanlines"></div>
+    <div class="glitch-bar"></div>
   </div>
 
   <div class="container">
@@ -390,41 +540,113 @@
     <footer>💌 방문해 주셔서 고마워요! 💌</footer>
   </div>
 
+  <!-- 👋 반가워! 알림 창 -->
+  <div class="popup-bg" id="popup" hidden>
+    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupMsg">
+      <div class="popup-tag">// INCOMING MESSAGE</div>
+      <div class="popup-msg" id="popupMsg">반가워! 👋😊</div>
+      <button class="popup-close" id="popupClose">확인</button>
+    </div>
+  </div>
+
   <script>
     const EMOJIS = ['🎉', '🌈', '⭐', '💖', '🎈', '🍭', '🦄', '🌸', '✨', '🎮', '🍀', '🔥', '🐣', '🍩'];
     const randomEmoji = () => EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
 
-    // 🌟 반짝이는 별 만들기
-    const night = document.getElementById('night');
-    for (let i = 0; i < 90; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.top = Math.random() * 65 + '%';
-      star.style.animationDuration = 1.5 + Math.random() * 3 + 's';
-      star.style.animationDelay = -Math.random() * 4 + 's';
-      night.appendChild(star);
-    }
+    const NEON = ['#fcee0a', '#00f0ff', '#ff2a6d'];
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const isMobile = window.innerWidth < 600;
 
-    // 🏙️ 빌딩과 불 켜진 창문 만들기
-    const skyline = document.getElementById('skyline');
-    const buildingCount = window.innerWidth < 600 ? 9 : 16;
-    for (let i = 0; i < buildingCount; i++) {
+    // 🏙️ 멀리 있는 빌딩
+    const far = document.getElementById('farSkyline');
+    for (let i = 0; i < (isMobile ? 12 : 24); i++) {
       const b = document.createElement('div');
       b.className = 'building';
-      b.style.height = 35 + Math.random() * 65 + '%';
-      for (let w = 0; w < 36; w++) {
-        const win = document.createElement('div');
-        win.className = 'window' + (Math.random() < 0.45 ? ' on' : '');
-        if (win.classList.contains('on')) win.style.animationDelay = -Math.random() * 6 + 's';
-        b.appendChild(win);
-      }
-      skyline.appendChild(b);
+      b.style.height = 30 + Math.random() * 70 + '%';
+      far.appendChild(b);
     }
 
+    // 🏢 가까운 빌딩 + 창문 + 네온 간판
+    const near = document.getElementById('nearSkyline');
+    const SIGNS = ['게임', '영화', '노래', '한별', '夜市', '電脳'];
+    const count = isMobile ? 7 : 13;
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div');
+      b.className = 'building';
+      const color = pick(NEON);
+      b.style.setProperty('--edge', color);
+      b.style.height = 40 + Math.random() * 60 + '%';
+      for (let w = 0; w < 60; w++) {
+        const win = document.createElement('div');
+        win.className = 'window';
+        if (Math.random() < 0.35) {
+          win.classList.add('on');
+          win.style.setProperty('--glow', Math.random() < 0.6 ? color : pick(NEON));
+          win.style.animationDelay = -Math.random() * 5 + 's';
+        }
+        b.appendChild(win);
+      }
+      if (i % 3 === 1) {
+        const sign = document.createElement('div');
+        sign.className = 'sign';
+        sign.textContent = SIGNS[Math.floor(i / 3) % SIGNS.length];
+        sign.style.setProperty('--glow', pick(NEON));
+        sign.style.animationDelay = -Math.random() * 4 + 's';
+        b.appendChild(sign);
+      }
+      near.appendChild(b);
+    }
+
+    // 🚗 하늘을 나는 차 불빛
+    const city = document.getElementById('city');
+    for (let i = 0; i < 6; i++) {
+      const car = document.createElement('div');
+      car.className = 'car' + (i % 2 ? ' reverse' : '');
+      car.style.top = 12 + Math.random() * 45 + '%';
+      car.style.setProperty('--glow', pick(NEON));
+      car.style.animationDuration = 4 + Math.random() * 6 + 's';
+      car.style.animationDelay = -Math.random() * 10 + 's';
+      city.insertBefore(car, near);
+    }
+
+    // 🌧️ 네온 빛에 비치는 비
+    const canvas = document.getElementById('rain');
+    const ctx = canvas.getContext('2d');
+    let drops = [];
+    function resizeRain() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const n = Math.floor(canvas.width / (isMobile ? 6 : 8));
+      drops = Array.from({ length: n }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        len: 10 + Math.random() * 18,
+        speed: 6 + Math.random() * 8,
+        color: Math.random() < 0.15 ? 'rgba(0, 240, 255, 0.55)' : 'rgba(180, 160, 255, 0.28)'
+      }));
+    }
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = 1;
+      for (const d of drops) {
+        ctx.strokeStyle = d.color;
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x - 2, d.y + d.len);
+        ctx.stroke();
+        d.y += d.speed;
+        d.x -= 0.4;
+        if (d.y > canvas.height) { d.y = -d.len; d.x = Math.random() * canvas.width; }
+      }
+      requestAnimationFrame(drawRain);
+    }
+    resizeRain();
+    window.addEventListener('resize', resizeRain);
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawRain();
+
     // 배경에 떠다니는 이모지 만들기
-    const NIGHT_EMOJIS = ['✨', '⭐', '🌟', '💫', '🎈', '🎆'];
-    for (let i = 0; i < 12; i++) {
+    const NIGHT_EMOJIS = ['⚡', '💿', '🤖', '🎧', '💾', '🌆'];
+    for (let i = 0; i < 8; i++) {
       const el = document.createElement('div');
       el.className = 'floating';
       el.textContent = NIGHT_EMOJIS[Math.floor(Math.random() * NIGHT_EMOJIS.length)];
@@ -458,8 +680,15 @@
 
     // 👋 인사 버튼을 누르면 알림 창이 떠요
     document.getElementById('helloBtn').addEventListener('click', () => {
-      alert('반가워! 👋😊');
+      popup.hidden = false;
+      document.getElementById('popupClose').focus();
     });
+
+    const popup = document.getElementById('popup');
+    const closePopup = () => { popup.hidden = true; };
+    document.getElementById('popupClose').addEventListener('click', closePopup);
+    popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
 
     // 얼굴을 누르면 표정이 바뀌어요
     const faces = ['😎', '😆', '🤩', '😜', '🥳', '😺', '🤖', '👻'];
