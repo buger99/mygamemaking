@@ -2,31 +2,50 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>정한별 자기소개</title>
-  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    /* 레이아웃: 비 내리는 네온 도시 위에, 알림 창과 같은 '모서리 잘린 네온 패널'이 떠 있는 구조 */
     :root {
       /* 사이버펑크 네온 팔레트 */
       --cp-night: #07040f;
       --cp-yellow: #fcee0a;
       --cp-cyan: #00f0ff;
       --cp-pink: #ff2a6d;
-      --cp-purple: #7a1fa2;
+      --panel: rgba(11, 6, 22, 0.86);
+      --ink: #f4efff;
+      --ink-dim: #c9bce3;
+
+      /* 글씨체 */
+      --font-display: 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      --font-hud: 'Orbitron', 'Jua', sans-serif;
+
+      /* 모서리 자르기 크기 */
+      --cut: 22px;
       color-scheme: dark;
     }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scrollbar-color: var(--cp-pink) var(--cp-night); }
+
     body {
-      font-family: 'Gaegu', 'Jua', sans-serif;
+      font-family: var(--font-body);
       min-height: 100vh;
       background: var(--cp-night);
+      color: var(--ink);
       overflow-x: hidden;
-      color: #333;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
 
-    /* 🌆 사이버펑크 도시 배경 */
+    ::selection { background: var(--cp-yellow); color: var(--cp-night); }
+
+    /* ───────── 🌆 사이버펑크 도시 배경 ───────── */
     .city {
       position: fixed;
       inset: 0;
@@ -40,7 +59,6 @@
         linear-gradient(to bottom, #07040f 0%, #160828 40%, #3a0b3f 70%, #5c0f3a 100%);
     }
 
-    /* 멀리 있는 빌딩 (흐릿한 보라 실루엣) */
     .skyline {
       position: absolute;
       left: 0;
@@ -58,7 +76,6 @@
       background: linear-gradient(to top, #2a0d3d, #1a0a2e);
     }
 
-    /* 가까운 빌딩 (네온 테두리 + 창문) */
     .near .building {
       flex: 1;
       position: relative;
@@ -80,12 +97,12 @@
     .window.on {
       background: var(--glow);
       box-shadow: 0 0 6px var(--glow);
-      animation: flicker 5s steps(1) infinite;
+      animation: flicker 6s ease-in-out infinite;
     }
 
     @keyframes flicker {
       0%, 88%, 100% { opacity: 1; }
-      90%, 94%      { opacity: 0.25; }
+      92%           { opacity: 0.55; }
     }
 
     /* 세로 네온 간판 */
@@ -95,7 +112,7 @@
       left: 50%;
       transform: translateX(-50%);
       writing-mode: vertical-rl;
-      font-family: 'Jua', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.4rem;
       letter-spacing: 0.2em;
       padding: 10px 4px;
@@ -104,14 +121,12 @@
       background: rgba(7, 4, 15, 0.85);
       text-shadow: 0 0 6px var(--glow), 0 0 16px var(--glow);
       box-shadow: 0 0 12px var(--glow), inset 0 0 10px var(--glow);
-      animation: signFlicker 4s steps(1) infinite;
-      z-index: 1;
+      animation: signFlicker 5s ease-in-out infinite;
     }
 
     @keyframes signFlicker {
-      0%, 70%, 74%, 100% { opacity: 1; }
-      72%                { opacity: 0.2; }
-      73%                { opacity: 0.8; }
+      0%, 70%, 78%, 100% { opacity: 1; }
+      73%                { opacity: 0.45; }
     }
 
     /* 하늘을 가로지르는 비행 차량 불빛 */
@@ -131,10 +146,9 @@
       animation-name: flyBack;
     }
 
-    @keyframes fly     { from { transform: translateX(0); }      to { transform: translateX(calc(100vw + 240px)); } }
+    @keyframes fly     { from { transform: translateX(0); } to { transform: translateX(calc(100vw + 240px)); } }
     @keyframes flyBack { from { transform: translateX(calc(100vw + 240px)); } to { transform: translateX(0); } }
 
-    /* 비 */
     #rain {
       position: absolute;
       inset: 0;
@@ -142,36 +156,34 @@
       height: 100%;
     }
 
-    /* 화면 주사선 + 글리치 */
+    /* 화면 주사선 + 가끔 튀는 글리치 */
     .scanlines {
       position: absolute;
       inset: 0;
-      background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0 1px, transparent 1px 3px);
+      background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px);
     }
 
     .glitch-bar {
       position: absolute;
       left: 0;
       right: 0;
-      height: 6px;
+      height: 4px;
       background: linear-gradient(90deg, var(--cp-cyan), var(--cp-pink), var(--cp-yellow));
       mix-blend-mode: screen;
       opacity: 0;
-      animation: glitch 7s steps(1) infinite;
+      animation: glitch 11s steps(1) infinite;
     }
 
     @keyframes glitch {
-      0%, 90%, 100% { opacity: 0; top: 30%; }
-      91%           { opacity: 0.8; top: 32%; transform: translateX(-20px); }
-      93%           { opacity: 0.6; top: 61%; transform: translateX(30px); height: 2px; }
-      95%           { opacity: 0.9; top: 45%; transform: translateX(-8px); height: 10px; }
+      0%, 94%, 100% { opacity: 0; top: 30%; }
+      95%           { opacity: 0.5; top: 32%; transform: translateX(-16px); }
+      97%           { opacity: 0.4; top: 58%; transform: translateX(20px); height: 2px; }
     }
 
     /* 배경에 둥둥 떠다니는 이모지 */
     .floating {
       position: fixed;
-      font-size: 2rem;
-      opacity: 0.45;
+      opacity: 0.4;
       pointer-events: none;
       animation: floatUp linear infinite;
       z-index: 0;
@@ -182,181 +194,278 @@
       100% { transform: translateY(-20vh) rotate(360deg); }
     }
 
+    /* ───────── 네온 패널 (알림 창과 같은 모양) ───────── */
+    .panel {
+      --edge: var(--cp-pink);
+      position: relative;
+      padding: 0;
+      background: none;
+      clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+    }
+
+    /* 네온 테두리: 바깥 모양에서 안쪽 모양을 뺀 2px 틀 */
+    .panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: var(--edge);
+      clip-path: polygon(evenodd,
+        0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 0,
+        2px 2px, calc(100% - var(--cut) - 0.83px) 2px, calc(100% - 2px) calc(var(--cut) + 0.83px), calc(100% - 2px) calc(100% - 2px), calc(var(--cut) + 0.83px) calc(100% - 2px), 2px calc(100% - var(--cut) - 0.83px), 2px 2px);
+    }
+
+    .panel-body {
+      position: relative;
+      height: 100%;
+      background: var(--panel);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 28px color-mix(in srgb, var(--edge) 18%, transparent);
+    }
+
+    /* 패널 오른쪽 아래의 작은 데이터 표시 */
+    .tag {
+      position: absolute;
+      right: calc(var(--cut) + 10px);
+      bottom: 10px;
+      font-family: var(--font-hud);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--edge);
+    }
+
     .container {
       position: relative;
       z-index: 1;
-      max-width: 860px;
+      max-width: 880px;
       margin: 0 auto;
-      padding: 40px 16px 60px;
+      padding: 48px 16px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
     }
 
-    /* 맨 위 인사 카드 */
-    .hero {
-      background: white;
-      border-radius: 32px;
-      padding: 40px 24px;
-      text-align: center;
-      box-shadow: 0 12px 0 #ff6b9d, 0 0 40px rgba(255, 42, 109, 0.7), 0 0 80px rgba(0, 240, 255, 0.25);
-      border: 5px solid #ff6b9d;
-      margin-bottom: 40px;
+    section { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ───────── 👋 맨 위 소개 ───────── */
+    .hero { --edge: var(--cp-yellow); }
+
+    .hero .panel-body {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 40px 44px 48px;
     }
 
     .avatar {
-      font-size: 6rem;
-      display: inline-block;
-      animation: bounce 1.5s ease-in-out infinite;
+      flex: none;
+      font-size: 6.5rem;
+      line-height: 1;
+      background: none;
+      border: none;
       cursor: pointer;
-      user-select: none;
+      filter: drop-shadow(0 6px 14px rgba(252, 238, 10, 0.35));
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-20px) scale(1.1); }
+    .avatar:hover { transform: rotate(-6deg) scale(1.06); }
+    .avatar.pop { animation: pop 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+
+    @keyframes pop {
+      0%   { transform: scale(0.8) rotate(-10deg); }
+      100% { transform: scale(1) rotate(0); }
     }
+
+    .hero-text { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 
     .hello {
-      font-family: 'Jua', sans-serif;
-      font-size: 1.6rem;
-      color: #ff6b9d;
-      margin-top: 10px;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--cp-cyan);
     }
 
+    /* 두둥실 떠다니는 이름 */
     .name {
-      font-family: 'Jua', sans-serif;
-      font-size: clamp(2.4rem, 8vw, 4rem);
-      background: linear-gradient(90deg, #ff4e50, #f9d423, #24c6dc, #a16bfe, #ff4e50);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shine 3s linear infinite, floaty 3s ease-in-out infinite;
-      margin: 8px 0;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(3rem, 10vw, 5rem);
+      line-height: 1.1;
+      color: var(--cp-yellow);
+      text-shadow: 3px 2px 0 var(--cp-pink), -3px -1px 0 var(--cp-cyan);
+      animation: floaty 3.2s ease-in-out infinite;
+      text-wrap: balance;
     }
 
-    @keyframes shine {
-      to { background-position: 200% center; }
-    }
+    .name .star { text-shadow: none; }
 
-    /* 두둥실 떠다니기 */
     @keyframes floaty {
-      0%, 100% { transform: translateY(0) rotate(-2deg); }
-      50%      { transform: translateY(-14px) rotate(2deg); }
+      0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+      50%      { transform: translateY(-12px) rotate(1.5deg); }
     }
 
     .tagline {
-      font-size: 1.5rem;
-      color: #666;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      text-wrap: balance;
     }
 
-    /* 섹션 제목 */
+    .hint {
+      font-size: 0.95rem;
+      color: var(--ink-dim);
+    }
+
+    .hint b { color: var(--cp-yellow); font-weight: 400; }
+
+    /* ───────── 섹션 제목 ───────── */
     .section-title {
-      font-family: 'Jua', sans-serif;
-      font-size: 2.2rem;
-      text-align: center;
-      color: white;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 2.1rem;
       color: var(--cp-yellow);
-      text-shadow: 3px 0 0 var(--cp-pink), -3px 0 0 var(--cp-cyan), 0 0 18px rgba(252, 238, 10, 0.6);
-      margin-bottom: 24px;
+      text-shadow: 2px 1px 0 var(--cp-pink), -2px -1px 0 var(--cp-cyan);
+      text-wrap: balance;
     }
 
-    /* 취미 카드들 */
+    /* ───────── 💖 취미 ───────── */
     .hobbies {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      margin-bottom: 40px;
     }
 
     .hobby {
-      border-radius: 24px;
-      padding: 28px 16px;
-      text-align: center;
-      color: white;
+      display: block;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      border: none;
       cursor: pointer;
-      transition: transform 0.25s, box-shadow 0.25s;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.3), 0 0 24px rgba(255,255,255,0.15);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .hobby:hover {
-      transform: translateY(-10px) rotate(-3deg) scale(1.05);
-      box-shadow: 0 18px 0 rgba(0,0,0,0.15);
-    }
+    .hobby:nth-child(1) { --edge: var(--cp-pink); }
+    .hobby:nth-child(2) { --edge: var(--cp-cyan); }
+    .hobby:nth-child(3) { --edge: var(--cp-yellow); }
 
-    .hobby:nth-child(4n+1) { background: linear-gradient(135deg, #ff6b9d, #ff9a76); }
-    .hobby:nth-child(4n+2) { background: linear-gradient(135deg, #4facfe, #00c6fb); }
-    .hobby:nth-child(4n+3) { background: linear-gradient(135deg, #43e97b, #2ec4b6); }
-    .hobby:nth-child(4n+4) { background: linear-gradient(135deg, #a16bfe, #f093fb); }
+    .hobby:hover { transform: translateY(-6px); }
+
+    .hobby .panel-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 24px 22px 44px;
+    }
 
     .hobby-emoji {
-      font-size: 4rem;
       display: block;
-      margin-bottom: 10px;
+      font-size: 3.4rem;
+      line-height: 1;
+      margin-bottom: 8px;
     }
 
     .hobby-name {
-      font-family: 'Jua', sans-serif;
-      font-size: 1.7rem;
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--edge);
     }
 
     .hobby-desc {
-      font-size: 1.25rem;
-      margin-top: 6px;
-      opacity: 0.95;
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--ink);
+      text-wrap: pretty;
     }
 
-    /* 재미있는 사실 */
-    .facts {
-      background: #fffbe6;
-      border: 5px dashed #f9a825;
-      border-radius: 28px;
-      padding: 28px 24px;
-      margin-bottom: 40px;
-    }
+    /* ───────── 🤩 TMI ───────── */
+    .facts { --edge: var(--cp-cyan); }
 
-    .facts ul { list-style: none; }
+    .facts .panel-body { padding: 24px 28px 40px; }
+
+    .facts ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
 
     .facts li {
-      font-size: 1.5rem;
-      padding: 10px 0;
-      border-bottom: 2px dotted #ffe082;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
     }
 
     .facts li:last-child { border-bottom: none; }
 
-    /* 버튼 */
+    .facts li::before {
+      content: '';
+      flex: none;
+      width: 8px;
+      height: 8px;
+      background: var(--cp-cyan);
+      transform: translateY(-2px) rotate(45deg);
+    }
+
+    .facts b { color: var(--cp-yellow); font-weight: 400; }
+
+    /* ───────── 🎉 버튼 ───────── */
     .btn-area {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 16px;
     }
 
-    .party-btn {
-      font-family: 'Jua', sans-serif;
-      font-size: 1.8rem;
-      padding: 16px 40px;
+    .btn {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      padding: 16px 36px;
       border: none;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #ff4e50, #f9d423);
-      color: white;
       cursor: pointer;
-      box-shadow: 0 8px 0 #c0392b;
-      transition: transform 0.1s, box-shadow 0.1s;
+      clip-path: polygon(0 0, 100% 0, 100% 70%, calc(100% - 16px) 100%, 0 100%);
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s;
     }
 
-    .party-btn:active {
-      transform: translateY(6px);
-      box-shadow: 0 2px 0 #c0392b;
+    .btn:hover  { filter: brightness(1.12); }
+    .btn:active { transform: translateY(3px); }
+
+    .btn-primary {
+      background: var(--cp-yellow);
+      color: var(--cp-night);
     }
 
-    .hello-btn {
-      background: linear-gradient(90deg, #4facfe, #a16bfe);
-      box-shadow: 0 8px 0 #5b3db5;
+    .btn-secondary {
+      background: var(--cp-night);
+      color: var(--cp-cyan);
+      box-shadow: inset 0 0 0 2px var(--cp-cyan);
     }
 
-    .hello-btn:active {
-      box-shadow: 0 2px 0 #5b3db5;
+    footer {
+      align-self: center;
+      font-size: 1.05rem;
+      color: var(--ink-dim);
+      background: var(--panel);
+      border: 1px solid rgba(255, 42, 109, 0.4);
+      padding: 10px 22px;
     }
+
+    /* 키보드로 고를 때 보이는 테두리 */
+    button:focus-visible {
+      outline: 3px solid var(--cp-cyan);
+      outline-offset: 4px;
+    }
+
+    .panel:focus-visible { outline: none; }
+    .hobby:focus-visible .panel-body { box-shadow: inset 0 0 0 3px var(--cp-cyan), inset 0 0 24px rgba(0, 240, 255, 0.3); }
 
     /* 버튼 누르면 터지는 이모지 */
     .confetti {
@@ -364,125 +473,102 @@
       font-size: 2rem;
       pointer-events: none;
       z-index: 10;
-      animation: pop 1.6s ease-out forwards;
+      animation: burst 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes pop {
+    @keyframes burst {
       0%   { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
-      100% { transform: translate(var(--x), var(--y)) scale(1.3) rotate(720deg); opacity: 0; }
+      100% { transform: translate(var(--x), var(--y)) scale(1.2) rotate(540deg); opacity: 0; }
     }
 
-    footer {
-      text-align: center;
-      font-size: 1.3rem;
-      color: white;
-      margin-top: 40px;
-      text-shadow: 0 0 8px rgba(0,0,0,0.6);
-      background: rgba(11, 15, 46, 0.7);
-      border-radius: 999px;
-      padding: 10px 20px;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    [hidden] { display: none !important; }
-
-    /* 👋 반가워! 알림 창 */
-    .popup-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      background: rgba(7, 4, 15, 0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
+    /* ───────── 👋 반가워! 알림 창 ───────── */
     .popup {
-      background: #0b0616;
-      border: 3px solid var(--cp-yellow);
-      box-shadow: 0 0 24px rgba(252, 238, 10, 0.6), 6px 6px 0 var(--cp-pink);
-      clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
-      padding: 32px 28px;
+      margin: auto;
+      border: none;
+      background: transparent;
+      padding: 0;
+      width: min(360px, calc(100% - 32px));
+      max-width: none;
+      color: var(--ink);
+    }
+
+    .popup::backdrop { background: rgba(7, 4, 15, 0.75); }
+
+    .popup[open] { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+
+    .popup .panel { --edge: var(--cp-yellow); --cut: 24px; }
+
+    .popup .panel-body {
+      padding: 36px 28px 44px;
       text-align: center;
-      width: min(360px, 100%);
-      animation: popIn 0.25s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
 
     @keyframes popIn {
-      from { transform: scale(0.6); opacity: 0; }
+      from { transform: scale(0.7); opacity: 0; }
       to   { transform: scale(1); opacity: 1; }
     }
 
-    .popup-tag {
-      font-family: 'Orbitron', 'Jua', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.25em;
-      color: var(--cp-cyan);
-    }
-
     .popup-msg {
-      font-family: 'Jua', sans-serif;
+      font-family: var(--font-display);
       font-size: 2.4rem;
       color: var(--cp-yellow);
       text-shadow: 2px 0 0 var(--cp-pink), -2px 0 0 var(--cp-cyan);
-      margin: 12px 0 20px;
     }
 
-    .popup-close {
-      font-family: 'Jua', sans-serif;
-      font-size: 1.3rem;
-      padding: 10px 36px;
-      border: none;
-      background: var(--cp-yellow);
-      color: #0b0616;
-      cursor: pointer;
-      clip-path: polygon(0 0, 100% 0, 100% 70%, 88% 100%, 0 100%);
-    }
-
-    button:focus-visible {
-      outline: 3px solid var(--cp-cyan);
-      outline-offset: 4px;
-    }
+    .popup .btn { font-size: 1.3rem; padding: 10px 40px; }
 
     /* 움직임 줄이기 설정을 켠 사람을 위해 */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; }
-      #rain, .floating, .car { display: none; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      #rain, .floating, .car, .glitch-bar { display: none; }
+      .hobby:hover, .avatar:hover { transform: none; }
     }
 
-    /* 📱 모바일 화면 */
+    /* ───────── 📱 휴대폰 화면 ───────── */
+    @media (max-width: 700px) {
+      .hobbies { grid-template-columns: 1fr; gap: 14px; }
+
+      .hobby .panel-body {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 16px;
+        row-gap: 4px;
+        align-items: center;
+        padding: 18px 18px 34px;
+      }
+
+      .hobby-emoji { grid-row: span 2; font-size: 2.8rem; margin: 0; }
+    }
+
     @media (max-width: 600px) {
-      .container { padding: 24px 16px 40px; }
-      .hero { padding: 28px 16px; border-radius: 24px; border-width: 4px; }
-      .avatar { font-size: 4.5rem; }
-      .hello { font-size: 1.3rem; }
-      .tagline { font-size: 1.2rem; }
+      :root { --cut: 16px; }
+      .container { padding: 28px 16px 48px; gap: 44px; }
+      .hero .panel-body { flex-direction: column; text-align: center; gap: 12px; padding: 28px 20px 40px; }
+      .avatar { font-size: 4.8rem; }
+      .hello { font-size: 1.25rem; }
+      .tagline { font-size: 1.05rem; }
       .section-title { font-size: 1.7rem; }
-      .hobbies { grid-template-columns: 1fr; gap: 16px; }
-      .hobby { padding: 20px 16px; }
-      .hobby-emoji { font-size: 3rem; }
-      .hobby-name { font-size: 1.5rem; }
-      .facts { padding: 18px 16px; border-width: 4px; }
-      .facts li { font-size: 1.2rem; }
-      .btn-area { flex-direction: column; gap: 16px; }
-      .party-btn { width: 100%; font-size: 1.4rem; padding: 14px 20px; }
+      .facts .panel-body { padding: 16px 20px 34px; }
+      .facts li { font-size: 1.05rem; }
+      .btn-area { flex-direction: column; }
+      .btn { width: 100%; font-size: 1.35rem; padding: 14px 20px; }
       .skyline.near { height: 34vh; gap: 3px; }
       .near .building { gap: 3px; padding: 8px 3px; grid-template-columns: repeat(3, 1fr); }
       .window { height: 4px; }
       .sign { font-size: 0.95rem; padding: 6px 2px; }
       .car { width: 60px; }
       .popup-msg { font-size: 2rem; }
-      .floating { font-size: 1.3rem !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🌆 사이버펑크 도시 -->
-  <div class="city" id="city">
+  <!-- 🌆 사이버펑크 도시 (꾸밈용이라 화면 읽기 프로그램에서는 숨겨요) -->
+  <div class="city" id="city" aria-hidden="true">
     <div class="skyline far" id="farSkyline"></div>
     <canvas id="rain"></canvas>
     <div class="skyline near" id="nearSkyline"></div>
@@ -490,133 +576,169 @@
     <div class="glitch-bar"></div>
   </div>
 
-  <div class="container">
+  <main class="container">
 
     <!-- 👋 인사 -->
-    <section class="hero">
-      <div class="avatar" id="avatar" title="눌러보세요!">😎</div>
-      <p class="hello">✨ 안녕하세요! 저는 ✨</p>
-      <h1 class="name">🌟 정한별 🌟</h1>
-      <p class="tagline">🎮 게임 만들기에 도전 중인 새내기 개발자예요! 🚀</p>
+    <section class="hero panel" aria-label="소개">
+      <div class="panel-body">
+        <button class="avatar" id="avatar" type="button" aria-label="표정 바꾸기">😎</button>
+        <div class="hero-text">
+          <p class="hello">안녕하세요! 저는 <span aria-hidden="true">✨</span></p>
+          <h1 class="name"><span class="star" aria-hidden="true">🌟</span> 정한별 <span class="star" aria-hidden="true">🌟</span></h1>
+          <p class="tagline"><span aria-hidden="true">🎮</span> 게임 만들기에 도전 중인 새내기 개발자예요! <span aria-hidden="true">🚀</span></p>
+          <p class="hint">얼굴을 누르면 <b>표정이 바뀌어요</b></p>
+        </div>
+        <span class="tag" aria-hidden="true">ID // HANBYEOL</span>
+      </div>
     </section>
 
     <!-- 💖 취미 -->
-    <h2 class="section-title">💖 나의 취미 💖</h2>
-    <section class="hobbies">
-      <div class="hobby">
-        <span class="hobby-emoji">🎮</span>
-        <div class="hobby-name">게임</div>
-        <div class="hobby-desc">하는 것도 좋고, 이제 직접 만들어 볼 거예요! 🕹️</div>
-      </div>
-      <div class="hobby">
-        <span class="hobby-emoji">🎬</span>
-        <div class="hobby-name">영화</div>
-        <div class="hobby-desc">팝콘 🍿 들고 영화 보는 시간이 최고!</div>
-      </div>
-      <div class="hobby">
-        <span class="hobby-emoji">🎵</span>
-        <div class="hobby-name">노래</div>
-        <div class="hobby-desc">듣는 것도 부르는 것도 좋아요 🎤🎶</div>
+    <section aria-labelledby="hobbyTitle">
+      <h2 class="section-title" id="hobbyTitle"><span aria-hidden="true">💖</span> 나의 취미 <span aria-hidden="true">💖</span></h2>
+      <div class="hobbies">
+        <button class="hobby panel" type="button">
+          <span class="panel-body">
+            <span class="hobby-emoji" aria-hidden="true">🎮</span>
+            <span class="hobby-name">게임</span>
+            <span class="hobby-desc">하는 것도 좋고, 이제 직접 만들어 볼 거예요! <span aria-hidden="true">🕹️</span></span>
+            <span class="tag" aria-hidden="true">GAME</span>
+          </span>
+        </button>
+        <button class="hobby panel" type="button">
+          <span class="panel-body">
+            <span class="hobby-emoji" aria-hidden="true">🎬</span>
+            <span class="hobby-name">영화</span>
+            <span class="hobby-desc">팝콘 <span aria-hidden="true">🍿</span> 들고 영화 보는 시간이 최고!</span>
+            <span class="tag" aria-hidden="true">MOVIE</span>
+          </span>
+        </button>
+        <button class="hobby panel" type="button">
+          <span class="panel-body">
+            <span class="hobby-emoji" aria-hidden="true">🎵</span>
+            <span class="hobby-name">노래</span>
+            <span class="hobby-desc">듣는 것도 부르는 것도 좋아요 <span aria-hidden="true">🎤🎶</span></span>
+            <span class="tag" aria-hidden="true">MUSIC</span>
+          </span>
+        </button>
       </div>
     </section>
 
     <!-- 🤩 재미있는 사실 -->
-    <h2 class="section-title">🤩 나에 대한 TMI 🤩</h2>
-    <section class="facts">
-      <ul>
-        <li>🎮 쉬는 날엔 게임 한 판은 기본!</li>
-        <li>🍿 영화 볼 때 팝콘은 필수예요</li>
-        <li>🎧 노래 들으면서 코딩하는 중~</li>
-        <li>💭 나의 꿈: <b>멋진 게임 만들기! 🕹️</b></li>
-      </ul>
+    <section aria-labelledby="tmiTitle">
+      <h2 class="section-title" id="tmiTitle"><span aria-hidden="true">🤩</span> 나에 대한 TMI <span aria-hidden="true">🤩</span></h2>
+      <div class="facts panel">
+        <div class="panel-body">
+          <ul>
+            <li><span><span aria-hidden="true">🎮</span> 쉬는 날엔 게임 한 판은 기본!</span></li>
+            <li><span><span aria-hidden="true">🍿</span> 영화 볼 때 팝콘은 필수예요</span></li>
+            <li><span><span aria-hidden="true">🎧</span> 노래 들으면서 코딩하는 중~</span></li>
+            <li><span><span aria-hidden="true">💭</span> 나의 꿈: <b>멋진 게임 만들기!</b> <span aria-hidden="true">🕹️</span></span></li>
+          </ul>
+          <span class="tag" aria-hidden="true">LOG // TMI</span>
+        </div>
+      </div>
     </section>
 
     <!-- 🎉 버튼 -->
     <div class="btn-area">
-      <button class="party-btn" id="partyBtn">🎉 파티 버튼! 눌러봐! 🎉</button>
-      <button class="party-btn hello-btn" id="helloBtn">👋 인사하기 👋</button>
+      <button class="btn btn-primary" id="helloBtn" type="button"><span aria-hidden="true">👋</span> 인사하기</button>
+      <button class="btn btn-secondary" id="partyBtn" type="button"><span aria-hidden="true">🎉</span> 파티 버튼! 눌러봐!</button>
     </div>
 
-    <footer>💌 방문해 주셔서 고마워요! 💌</footer>
-  </div>
+    <footer><span aria-hidden="true">💌</span> 방문해 주셔서 고마워요!</footer>
+  </main>
 
   <!-- 👋 반가워! 알림 창 -->
-  <div class="popup-bg" id="popup" hidden>
-    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupMsg">
-      <div class="popup-tag">// INCOMING MESSAGE</div>
-      <div class="popup-msg" id="popupMsg">반가워! 👋😊</div>
-      <button class="popup-close" id="popupClose">확인</button>
+  <dialog class="popup" id="popup" aria-labelledby="popupMsg">
+    <div class="panel">
+      <div class="panel-body">
+        <p class="popup-msg" id="popupMsg">반가워! <span aria-hidden="true">👋😊</span></p>
+        <button class="btn btn-primary" id="popupClose" type="button">확인</button>
+        <span class="tag" aria-hidden="true">MSG // 한별</span>
+      </div>
     </div>
-  </div>
+  </dialog>
 
   <script>
     const EMOJIS = ['🎉', '🌈', '⭐', '💖', '🎈', '🍭', '🦄', '🌸', '✨', '🎮', '🍀', '🔥', '🐣', '🍩'];
     const randomEmoji = () => EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-
     const NEON = ['#fcee0a', '#00f0ff', '#ff2a6d'];
     const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-    const isMobile = window.innerWidth < 600;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobileQuery = window.matchMedia('(max-width: 600px)');
 
-    // 🏙️ 멀리 있는 빌딩
-    const far = document.getElementById('farSkyline');
-    for (let i = 0; i < (isMobile ? 12 : 24); i++) {
-      const b = document.createElement('div');
-      b.className = 'building';
-      b.style.height = 30 + Math.random() * 70 + '%';
-      far.appendChild(b);
-    }
-
-    // 🏢 가까운 빌딩 + 창문 + 네온 간판
-    const near = document.getElementById('nearSkyline');
-    const SIGNS = ['게임', '영화', '노래', '한별', '夜市', '電脳'];
-    const count = isMobile ? 7 : 13;
-    for (let i = 0; i < count; i++) {
-      const b = document.createElement('div');
-      b.className = 'building';
-      const color = pick(NEON);
-      b.style.setProperty('--edge', color);
-      b.style.height = 40 + Math.random() * 60 + '%';
-      for (let w = 0; w < 60; w++) {
-        const win = document.createElement('div');
-        win.className = 'window';
-        if (Math.random() < 0.35) {
-          win.classList.add('on');
-          win.style.setProperty('--glow', Math.random() < 0.6 ? color : pick(NEON));
-          win.style.animationDelay = -Math.random() * 5 + 's';
-        }
-        b.appendChild(win);
-      }
-      if (i % 3 === 1) {
-        const sign = document.createElement('div');
-        sign.className = 'sign';
-        sign.textContent = SIGNS[Math.floor(i / 3) % SIGNS.length];
-        sign.style.setProperty('--glow', pick(NEON));
-        sign.style.animationDelay = -Math.random() * 4 + 's';
-        b.appendChild(sign);
-      }
-      near.appendChild(b);
-    }
-
-    // 🚗 하늘을 나는 차 불빛
     const city = document.getElementById('city');
-    for (let i = 0; i < 6; i++) {
-      const car = document.createElement('div');
-      car.className = 'car' + (i % 2 ? ' reverse' : '');
-      car.style.top = 12 + Math.random() * 45 + '%';
-      car.style.setProperty('--glow', pick(NEON));
-      car.style.animationDuration = 4 + Math.random() * 6 + 's';
-      car.style.animationDelay = -Math.random() * 10 + 's';
-      city.insertBefore(car, near);
+    const far = document.getElementById('farSkyline');
+    const near = document.getElementById('nearSkyline');
+
+    // 🏙️ 빌딩, 창문, 네온 간판, 하늘을 나는 차 만들기
+    function buildCity() {
+      const isMobile = mobileQuery.matches;
+      far.replaceChildren();
+      near.replaceChildren();
+      city.querySelectorAll('.car').forEach(car => car.remove());
+
+      for (let i = 0; i < (isMobile ? 12 : 24); i++) {
+        const b = document.createElement('div');
+        b.className = 'building';
+        b.style.height = 30 + Math.random() * 70 + '%';
+        far.appendChild(b);
+      }
+
+      const SIGNS = ['게임', '영화', '노래', '한별', '夜市', '電脳'];
+      const count = isMobile ? 7 : 13;
+      for (let i = 0; i < count; i++) {
+        const b = document.createElement('div');
+        b.className = 'building';
+        const color = pick(NEON);
+        b.style.setProperty('--edge', color);
+        b.style.height = 40 + Math.random() * 60 + '%';
+        for (let w = 0; w < 60; w++) {
+          const win = document.createElement('div');
+          win.className = 'window';
+          if (Math.random() < 0.35) {
+            win.classList.add('on');
+            win.style.setProperty('--glow', Math.random() < 0.6 ? color : pick(NEON));
+            win.style.animationDelay = -Math.random() * 6 + 's';
+          }
+          b.appendChild(win);
+        }
+        if (i % 3 === 1) {
+          const sign = document.createElement('div');
+          sign.className = 'sign';
+          sign.textContent = SIGNS[Math.floor(i / 3) % SIGNS.length];
+          sign.style.setProperty('--glow', pick(NEON));
+          sign.style.animationDelay = -Math.random() * 5 + 's';
+          b.appendChild(sign);
+        }
+        near.appendChild(b);
+      }
+
+      for (let i = 0; i < 6; i++) {
+        const car = document.createElement('div');
+        car.className = 'car' + (i % 2 ? ' reverse' : '');
+        car.style.top = 12 + Math.random() * 45 + '%';
+        car.style.setProperty('--glow', pick(NEON));
+        car.style.animationDuration = 4 + Math.random() * 6 + 's';
+        car.style.animationDelay = -Math.random() * 10 + 's';
+        city.insertBefore(car, near);
+      }
     }
+    buildCity();
+    // 휴대폰을 돌려서 화면 크기가 바뀌면 도시를 다시 지어요
+    mobileQuery.addEventListener('change', buildCity);
 
     // 🌧️ 네온 빛에 비치는 비
     const canvas = document.getElementById('rain');
     const ctx = canvas.getContext('2d');
     let drops = [];
+    let rainWidth = 0;
     function resizeRain() {
-      canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      const n = Math.floor(canvas.width / (isMobile ? 6 : 8));
+      // 주소창이 접히는 정도의 높이 변화로는 빗방울을 새로 만들지 않아요
+      if (window.innerWidth === rainWidth) return;
+      rainWidth = canvas.width = window.innerWidth;
+      const n = Math.floor(canvas.width / (mobileQuery.matches ? 6 : 8));
       drops = Array.from({ length: n }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -642,26 +764,29 @@
     }
     resizeRain();
     window.addEventListener('resize', resizeRain);
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawRain();
+    if (!reduceMotion) drawRain();
 
-    // 배경에 떠다니는 이모지 만들기
-    const NIGHT_EMOJIS = ['⚡', '💿', '🤖', '🎧', '💾', '🌆'];
-    for (let i = 0; i < 8; i++) {
+    // 배경에 떠다니는 이모지 (조금만)
+    const NIGHT_EMOJIS = ['⚡', '💿', '🤖', '🎧'];
+    NIGHT_EMOJIS.forEach((emoji, i) => {
       const el = document.createElement('div');
       el.className = 'floating';
-      el.textContent = NIGHT_EMOJIS[Math.floor(Math.random() * NIGHT_EMOJIS.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.animationDuration = 10 + Math.random() * 15 + 's';
+      el.setAttribute('aria-hidden', 'true');
+      el.textContent = emoji;
+      el.style.left = 8 + i * 24 + Math.random() * 10 + 'vw';
+      el.style.animationDuration = 16 + Math.random() * 12 + 's';
       el.style.animationDelay = -Math.random() * 20 + 's';
-      el.style.fontSize = 1.2 + Math.random() * 2 + 'rem';
+      el.style.fontSize = 1.4 + Math.random() * 1.2 + 'rem';
       document.body.appendChild(el);
-    }
+    });
 
     // 이모지 폭죽 터뜨리기
     function burst(x, y, count) {
+      if (reduceMotion) return;
       for (let i = 0; i < count; i++) {
         const el = document.createElement('div');
         el.className = 'confetti';
+        el.setAttribute('aria-hidden', 'true');
         el.textContent = randomEmoji();
         el.style.left = x + 'px';
         el.style.top = y + 'px';
@@ -674,21 +799,25 @@
       }
     }
 
-    document.getElementById('partyBtn').addEventListener('click', (e) => {
-      burst(e.clientX, e.clientY, 30);
-    });
+    // 마우스로 누르면 누른 자리, 키보드로 누르면 버튼 한가운데에서 터져요
+    function burstFrom(e, count) {
+      const r = e.currentTarget.getBoundingClientRect();
+      const fromKeyboard = e.detail === 0;
+      burst(fromKeyboard ? r.left + r.width / 2 : e.clientX,
+            fromKeyboard ? r.top + r.height / 2 : e.clientY, count);
+    }
+
+    document.getElementById('partyBtn').addEventListener('click', (e) => burstFrom(e, 30));
 
     // 👋 인사 버튼을 누르면 알림 창이 떠요
-    document.getElementById('helloBtn').addEventListener('click', () => {
-      popup.hidden = false;
-      document.getElementById('popupClose').focus();
-    });
-
     const popup = document.getElementById('popup');
-    const closePopup = () => { popup.hidden = true; };
-    document.getElementById('popupClose').addEventListener('click', closePopup);
-    popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
+    const helloBtn = document.getElementById('helloBtn');
+    helloBtn.addEventListener('click', () => popup.showModal());
+    document.getElementById('popupClose').addEventListener('click', () => popup.close());
+    // 창 바깥(어두운 부분)을 눌러도 닫혀요
+    popup.addEventListener('click', (e) => { if (e.target === popup) popup.close(); });
+    // 닫히면 다시 인사하기 버튼으로 돌아가요
+    popup.addEventListener('close', () => helloBtn.focus());
 
     // 얼굴을 누르면 표정이 바뀌어요
     const faces = ['😎', '😆', '🤩', '😜', '🥳', '😺', '🤖', '👻'];
@@ -697,12 +826,15 @@
     avatar.addEventListener('click', (e) => {
       faceIndex = (faceIndex + 1) % faces.length;
       avatar.textContent = faces[faceIndex];
-      burst(e.clientX, e.clientY, 10);
+      avatar.classList.remove('pop');
+      void avatar.offsetWidth;
+      avatar.classList.add('pop');
+      burstFrom(e, 10);
     });
 
     // 취미 카드를 누르면 작은 폭죽
     document.querySelectorAll('.hobby').forEach(card => {
-      card.addEventListener('click', (e) => burst(e.clientX, e.clientY, 12));
+      card.addEventListener('click', (e) => burstFrom(e, 12));
     });
   </script>
 </body>
