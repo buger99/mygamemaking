@@ -11,24 +11,90 @@
     body {
       font-family: 'Gaegu', 'Jua', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb, #d4fc79, #fbc2eb);
-      background-size: 400% 400%;
-      animation: rainbowBg 12s ease infinite;
+      background: linear-gradient(to bottom, #0b0f2e 0%, #1b1550 45%, #4a2a7a 75%, #c0587e 100%);
+      background-attachment: fixed;
       overflow-x: hidden;
       color: #333;
     }
 
-    @keyframes rainbowBg {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* 🌃 도시 야경 배경 */
+    .night {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50%      { opacity: 1; }
+    }
+
+    .moon {
+      position: absolute;
+      top: 6%;
+      right: 8%;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fffbe0, #ffe9a3 60%, #f5d26b);
+      box-shadow: 0 0 40px 12px rgba(255, 236, 160, 0.45);
+    }
+
+    .skyline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 38vh;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .building {
+      flex: 1;
+      background: #120d2b;
+      border-top: 2px solid #2b2160;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 10px 6px;
+      align-content: start;
+    }
+
+    .window {
+      height: 8px;
+      border-radius: 1px;
+      background: #241b4d;
+    }
+
+    .window.on {
+      background: #ffd966;
+      box-shadow: 0 0 6px #ffcc33;
+      animation: flicker 6s ease-in-out infinite;
+    }
+
+    @keyframes flicker {
+      0%, 92%, 100% { opacity: 1; }
+      95%           { opacity: 0.4; }
     }
 
     /* 배경에 둥둥 떠다니는 이모지 */
     .floating {
       position: fixed;
       font-size: 2rem;
-      opacity: 0.6;
+      opacity: 0.45;
       pointer-events: none;
       animation: floatUp linear infinite;
       z-index: 0;
@@ -53,7 +119,7 @@
       border-radius: 32px;
       padding: 40px 24px;
       text-align: center;
-      box-shadow: 0 12px 0 #ff6b9d, 0 20px 40px rgba(0,0,0,0.15);
+      box-shadow: 0 12px 0 #ff6b9d, 0 0 40px rgba(255, 107, 157, 0.6);
       border: 5px solid #ff6b9d;
       margin-bottom: 40px;
     }
@@ -86,12 +152,18 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      animation: shine 3s linear infinite;
+      animation: shine 3s linear infinite, floaty 3s ease-in-out infinite;
       margin: 8px 0;
     }
 
     @keyframes shine {
       to { background-position: 200% center; }
+    }
+
+    /* 두둥실 떠다니기 */
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-14px) rotate(2deg); }
     }
 
     .tagline {
@@ -105,7 +177,7 @@
       font-size: 2.2rem;
       text-align: center;
       color: white;
-      text-shadow: 3px 3px 0 #a16bfe, 6px 6px 0 rgba(0,0,0,0.1);
+      text-shadow: 0 0 10px #f093fb, 0 0 22px #a16bfe;
       margin-bottom: 24px;
     }
 
@@ -124,7 +196,7 @@
       color: white;
       cursor: pointer;
       transition: transform 0.25s, box-shadow 0.25s;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.15);
+      box-shadow: 0 8px 0 rgba(0,0,0,0.3), 0 0 24px rgba(255,255,255,0.15);
     }
 
     .hobby:hover {
@@ -174,7 +246,12 @@
     .facts li:last-child { border-bottom: none; }
 
     /* 버튼 */
-    .btn-area { text-align: center; }
+    .btn-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
 
     .party-btn {
       font-family: 'Jua', sans-serif;
@@ -192,6 +269,15 @@
     .party-btn:active {
       transform: translateY(6px);
       box-shadow: 0 2px 0 #c0392b;
+    }
+
+    .hello-btn {
+      background: linear-gradient(90deg, #4facfe, #a16bfe);
+      box-shadow: 0 8px 0 #5b3db5;
+    }
+
+    .hello-btn:active {
+      box-shadow: 0 2px 0 #5b3db5;
     }
 
     /* 버튼 누르면 터지는 이모지 */
@@ -213,11 +299,46 @@
       font-size: 1.3rem;
       color: white;
       margin-top: 40px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      background: rgba(11, 15, 46, 0.7);
+      border-radius: 999px;
+      padding: 10px 20px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 📱 모바일 화면 */
+    @media (max-width: 600px) {
+      .container { padding: 24px 16px 40px; }
+      .hero { padding: 28px 16px; border-radius: 24px; border-width: 4px; }
+      .avatar { font-size: 4.5rem; }
+      .hello { font-size: 1.3rem; }
+      .tagline { font-size: 1.2rem; }
+      .section-title { font-size: 1.7rem; }
+      .hobbies { grid-template-columns: 1fr; gap: 16px; }
+      .hobby { padding: 20px 16px; }
+      .hobby-emoji { font-size: 3rem; }
+      .hobby-name { font-size: 1.5rem; }
+      .facts { padding: 18px 16px; border-width: 4px; }
+      .facts li { font-size: 1.2rem; }
+      .btn-area { flex-direction: column; gap: 16px; }
+      .party-btn { width: 100%; font-size: 1.4rem; padding: 14px 20px; }
+      .moon { width: 56px; height: 56px; top: 3%; }
+      .skyline { height: 26vh; gap: 2px; }
+      .building { gap: 4px; padding: 6px 3px; }
+      .window { height: 5px; }
+      .floating { font-size: 1.3rem !important; }
     }
   </style>
 </head>
 <body>
+
+  <!-- 🌃 도시 야경 -->
+  <div class="night" id="night">
+    <div class="moon"></div>
+    <div class="skyline" id="skyline"></div>
+  </div>
 
   <div class="container">
 
@@ -263,6 +384,7 @@
     <!-- 🎉 버튼 -->
     <div class="btn-area">
       <button class="party-btn" id="partyBtn">🎉 파티 버튼! 눌러봐! 🎉</button>
+      <button class="party-btn hello-btn" id="helloBtn">👋 인사하기 👋</button>
     </div>
 
     <footer>💌 방문해 주셔서 고마워요! 💌</footer>
@@ -272,11 +394,40 @@
     const EMOJIS = ['🎉', '🌈', '⭐', '💖', '🎈', '🍭', '🦄', '🌸', '✨', '🎮', '🍀', '🔥', '🐣', '🍩'];
     const randomEmoji = () => EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
 
+    // 🌟 반짝이는 별 만들기
+    const night = document.getElementById('night');
+    for (let i = 0; i < 90; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 65 + '%';
+      star.style.animationDuration = 1.5 + Math.random() * 3 + 's';
+      star.style.animationDelay = -Math.random() * 4 + 's';
+      night.appendChild(star);
+    }
+
+    // 🏙️ 빌딩과 불 켜진 창문 만들기
+    const skyline = document.getElementById('skyline');
+    const buildingCount = window.innerWidth < 600 ? 9 : 16;
+    for (let i = 0; i < buildingCount; i++) {
+      const b = document.createElement('div');
+      b.className = 'building';
+      b.style.height = 35 + Math.random() * 65 + '%';
+      for (let w = 0; w < 36; w++) {
+        const win = document.createElement('div');
+        win.className = 'window' + (Math.random() < 0.45 ? ' on' : '');
+        if (win.classList.contains('on')) win.style.animationDelay = -Math.random() * 6 + 's';
+        b.appendChild(win);
+      }
+      skyline.appendChild(b);
+    }
+
     // 배경에 떠다니는 이모지 만들기
-    for (let i = 0; i < 18; i++) {
+    const NIGHT_EMOJIS = ['✨', '⭐', '🌟', '💫', '🎈', '🎆'];
+    for (let i = 0; i < 12; i++) {
       const el = document.createElement('div');
       el.className = 'floating';
-      el.textContent = randomEmoji();
+      el.textContent = NIGHT_EMOJIS[Math.floor(Math.random() * NIGHT_EMOJIS.length)];
       el.style.left = Math.random() * 100 + 'vw';
       el.style.animationDuration = 10 + Math.random() * 15 + 's';
       el.style.animationDelay = -Math.random() * 20 + 's';
@@ -303,6 +454,11 @@
 
     document.getElementById('partyBtn').addEventListener('click', (e) => {
       burst(e.clientX, e.clientY, 30);
+    });
+
+    // 👋 인사 버튼을 누르면 알림 창이 떠요
+    document.getElementById('helloBtn').addEventListener('click', () => {
+      alert('반가워! 👋😊');
     });
 
     // 얼굴을 누르면 표정이 바뀌어요
