@@ -74,7 +74,7 @@
 
     /* 캐릭터가 서 있는 무대 */
     .stage {
-      height: 290px;
+      height: 330px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -82,8 +82,8 @@
     }
 
     #sprite {
-      width: 240px;
-      height: 240px;
+      width: 200px;
+      height: 300px;
       image-rendering: pixelated;
       animation: idle 1.2s steps(1) infinite;
     }
@@ -285,8 +285,8 @@
     }
 
     @media (max-width: 520px) {
-      .stage { height: 230px; }
-      #sprite { width: 192px; height: 192px; }
+      .stage { height: 270px; }
+      #sprite { width: 160px; height: 240px; }
       .box { padding: 14px 16px; min-height: 140px; }
       .dialog-text, .choice { font-size: 1.35rem; }
       .status { font-size: 1.2rem; }
@@ -303,7 +303,7 @@
     </div>
 
     <div class="stage">
-      <canvas id="sprite" width="16" height="16" role="img" aria-label="별 모양 도트 캐릭터, 정한별"></canvas>
+      <canvas id="sprite" width="16" height="24" role="img" aria-label="노란 별무늬 파란 줄무늬 옷을 입은 도트 소년, 정한별"></canvas>
     </div>
 
     <!-- 대화창 -->
@@ -372,36 +372,48 @@
       osc.stop(audio.currentTime + len);
     }
 
-    // ───────── ⭐ 별 캐릭터 그리기 ─────────
+    // ───────── 🧒 도트 소년 캐릭터 그리기 (16×24) ─────────
+    // H 머리카락 · S 피부 · K 눈 · W 눈 반짝임 · P 볼 · B 옷 · Y 노란 줄무늬/별 · N 바지 · O 신발
     const SPRITE = [
-      '.......YY.......',
-      '......YYYY......',
-      '......YYYY......',
-      '.....YYYYYY.....',
-      'YYYYYYYYYYYYYYYY',
-      '.YYYYYYYYYYYYYY.',
-      '..YYYKKYYYYKKY..',
-      '..YYYKWYYYYKWY..',
-      '..YYYKKYYYYKKY..',
-      '..YPPYYYYYYYPPY.',
-      '..YPPYYKKKKYPPY.',
-      '..YYYYYY..YYYYY.',
-      '.YYYY......YYYY.',
-      '.YYY........YYY.',
-      'YYY..........YYY',
-      'YY............YY'
+      '.....HHHHHH.....',
+      '....HHHHHHHH....',
+      '...HHHHHHHHHH...',
+      '...HHHHHHHHHH...',
+      '...HHSSSSSSHH...',
+      '...HSSSSSSSSH...',
+      '...SSKKSSSKKSS..',
+      '...SSKWSSSKWSS..',
+      '...SSKKSSSKKSS..',
+      '...PPSSSSSSSPP..',
+      '...PPSSKKKSSPP..',
+      '....SSSSSSSSS...',
+      '.....SSSSSSS....',
+      '....BBBBBBBBB...',
+      '...BBBBBBBBBBB..',
+      '..SBBBBBYBBBBBS.',
+      '..SBBBYYYYYBBBS.',
+      '..SBBBBYYYBBBBS.',
+      '...BBBBYBYBBBB..',
+      '...NNNNNNNNNNN..',
+      '...NNNNN.NNNNN..',
+      '...NNNN...NNNN..',
+      '..OOOOO...OOOOO.',
+      '..OOOOO...OOOOO.'
     ];
     // 눈 감은 모습
     const BLINK = SPRITE.map((row, y) => {
-      if (y === 6 || y === 8) return row.replace(/[KW]/g, 'Y');
-      if (y === 7) return '..YYYKKYYYYKKY..';
+      if (y === 6 || y === 8) return row.replace(/[KW]/g, 'S');
+      if (y === 7) return '...SSKKSSSKKSS..';
       return row;
     });
-    const PALETTE = { Y: '#ffe23d', W: '#ffffff', K: '#2b1d0e', P: '#ff9fb0' };
+    const PALETTE = {
+      H: '#4a2c1a', S: '#ffd9b3', K: '#2b1d0e', W: '#ffffff', P: '#ff9fb0',
+      B: '#3b6bd8', Y: '#ffe23d', N: '#3a2a4a', O: '#5a3a1e'
+    };
     const spriteCtx = document.getElementById('sprite').getContext('2d');
 
     function drawSprite(map) {
-      spriteCtx.clearRect(0, 0, 16, 16);
+      spriteCtx.clearRect(0, 0, 16, 24);
       map.forEach((row, y) => [...row].forEach((c, x) => {
         if (PALETTE[c]) { spriteCtx.fillStyle = PALETTE[c]; spriteCtx.fillRect(x, y, 1, 1); }
       }));
