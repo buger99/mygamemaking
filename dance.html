@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>정한별 리듬 로드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* 레이아웃: 화면 전체가 밤하늘 무대, 위에 진행도·소리, 가운데 시작/결과 카드, 아래 판정 글씨 */
+    :root {
+      --sky: #121a3a;
+      --ink: #f6f3ff;
+      --ink-dim: #b8b4d8;
+      --fire: #ff5a36;
+      --ice: #4cc3ff;
+      --card: rgba(10, 14, 34, 0.86);
+      --font: 'Gothic A1', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      color-scheme: dark;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--sky);
+      color: var(--ink);
+      font-family: var(--font);
+      overflow: hidden;
+      word-break: keep-all;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    ::selection { background: var(--fire); color: var(--ink); }
+
+    #stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    .hud {
+      position: fixed;
+      top: env(safe-area-inset-top, 0px);
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      pointer-events: none;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink-dim);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bar {
+      width: min(36vw, 200px);
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--fire), var(--ice));
+    }
+
+    .icon-btn {
+      pointer-events: auto;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    /* 시작 / 결과 카드 */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background: rgba(8, 10, 26, 0.55);
+    }
+
+    .card {
+      width: min(440px, 100%);
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 24px;
+      padding: 32px 28px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .planets {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .planet {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+    }
+
+    .planet.fire { background: radial-gradient(circle at 35% 35%, #ffd2a1, var(--fire) 60%); box-shadow: 0 6px 18px rgba(255, 90, 54, 0.5); }
+    .planet.ice  { background: radial-gradient(circle at 35% 35%, #e3f8ff, var(--ice) 60%); box-shadow: 0 6px 18px rgba(76, 195, 255, 0.5); }
+
+    .card h1 {
+      font-size: clamp(1.7rem, 6vw, 2.2rem);
+      font-weight: 900;
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+
+    .card p {
+      color: var(--ink-dim);
+      line-height: 1.7;
+      text-wrap: balance;
+    }
+
+    .card p b { color: var(--ink); }
+
+    .start-btn {
+      font: inherit;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #1a0f08;
+      background: linear-gradient(90deg, #ffb36b, #ffe08a);
+      border: none;
+      border-radius: 999px;
+      padding: 14px 40px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 140, 60, 0.35);
+    }
+
+    .start-btn:active { transform: translateY(2px); }
+
+    .small { font-size: 0.85rem; }
+
+    .results {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 4px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .stat b {
+      font-size: 1.4rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat span { font-size: 0.8rem; color: var(--ink-dim); }
+
+    .accuracy {
+      font-size: 2.6rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      background: none;
+      color: #ffe08a;
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--ice);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 26px 18px; }
+      .results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stage" aria-label="불 행성과 얼음 행성이 길을 따라 도는 리듬 게임 화면"></canvas>
+
+  <div class="hud">
+    <div class="progress">
+      <div class="bar" aria-hidden="true"><div class="bar-fill" id="barFill"></div></div>
+      <span id="progressText">0%</span>
+    </div>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true">♪ 소리 켬</button>
+  </div>
+
+  <!-- 시작 화면 -->
+  <div class="overlay" id="startScreen">
+    <div class="card">
+      <div class="planets" aria-hidden="true"><span class="planet fire"></span><span class="planet ice"></span></div>
+      <h1>정한별 리듬 로드</h1>
+      <p>불 행성과 얼음 행성이 서로를 돌며 길을 걸어가요.<br>
+        돌고 있는 행성이 <b>다음 칸에 닿는 순간</b> 아무 키나 누르거나 화면을 터치하세요.</p>
+      <p class="small">길을 따라가면 정한별 소개가 하나씩 나타나요.</p>
+      <button class="start-btn" id="startBtn" type="button">시작하기</button>
+      <p class="small">스페이스바 · 아무 키 · 터치로 박자 맞추기 · Esc 처음으로</p>
+    </div>
+  </div>
+
+  <!-- 결과 화면 -->
+  <div class="overlay" id="resultScreen" hidden>
+    <div class="card" role="dialog" aria-labelledby="resultTitle">
+      <div class="planets" aria-hidden="true"><span class="planet fire"></span><span class="planet ice"></span></div>
+      <h1 id="resultTitle">반가워! 끝까지 함께 걸었어요</h1>
+      <div class="accuracy" id="accuracy">0%</div>
+      <div class="results">
+        <div class="stat"><b id="rPerfect">0</b><span>완벽</span></div>
+        <div class="stat"><b id="rGood">0</b><span>좋아</span></div>
+        <div class="stat"><b id="rClose">0</b><span>아슬아슬</span></div>
+        <div class="stat"><b id="rMiss">0</b><span>놓침</span></div>
+      </div>
+      <p>정한별 · LV 1 새내기 개발자<br>게임 · 영화 · 노래를 좋아해요</p>
+      <button class="start-btn" id="againBtn" type="button">다시 하기</button>
+    </div>
+  </div>
+
+  <p class="sr-only" id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
+
+  <script>
+    // ───────── 🎵 박자와 길 ─────────
+    const BPM = 100;
+    const BEAT = 60 / BPM;
+    const COUNT_IN = 4;               // 시작 전 4박자 세기
+    const WINDOW = 0.18;              // 이 시간(초) 안에 누르면 인정
+    const DIRS = { R: 0, U: 90, L: 180, D: 270 };
+
+    // 길 모양: [방향, 칸 수]
+    const SEGMENTS = [
+      ['R', 5], ['U', 3], ['R', 4], ['D', 3], ['R', 4], ['U', 4], ['R', 3],
+      ['D', 4], ['R', 4], ['U', 3], ['R', 4], ['D', 2], ['R', 4]
+    ];
+
+    // 길 위의 소개 표지판 (칸 번호: 글)
+    const SIGNS = {
+      0:  '정한별 리듬 로드',
+      5:  '안녕하세요! 저는 정한별',
+      12: 'LV 1 · 새내기 개발자',
+      19: '🎮 게임 — 하는 것도, 만드는 것도!',
+      26: '🎬 영화 — 팝콘은 필수',
+      33: '🎵 노래 — 듣고 부르는 게 좋아요',
+      40: '💭 꿈: 멋진 게임 만들기!',
+      47: '반가워! 👋'
+    };
+
+    // 구간마다 바뀌는 하늘 색
+    const SKIES = ['#121a3a', '#1b1640', '#2a1238', '#122a3a', '#10302c', '#2b2410', '#1a1a3c', '#3a1430'];
+
+    const dirs = [];
+    SEGMENTS.forEach(([d, n]) => { for (let i = 0; i < n; i++) dirs.push(DIRS[d]); });
+    const N = dirs.length + 1;
+    const tiles = [{ x: 0, y: 0 }];
+    dirs.forEach((deg, i) => {
+      const r = deg * Math.PI / 180;
+      tiles.push({ x: tiles[i].x + Math.round(Math.cos(r)), y: tiles[i].y + Math.round(Math.sin(r)) });
+    });
+
+    // 각 칸에 도착하는 시간 계산 (행성은 시계 방향으로 1박자에 반 바퀴)
+    const hitTime = new Array(N).fill(0);
+    hitTime[1] = COUNT_IN * BEAT;
+    for (let i = 1; i < N - 1; i++) {
+      const back = (dirs[i - 1] + 180) % 360;
+      let travel = ((back - dirs[i]) % 360 + 360) % 360;
+      if (travel === 0) travel = 360;
+      hitTime[i + 1] = hitTime[i] + travel / 180 * BEAT;
+    }
+    const SONG_END = hitTime[N - 1] + 2 * BEAT;
+
+    // ───────── 🔊 소리 (Web Audio로 직접 만든 소리) ─────────
+    let actx = null, master = null;
+    let soundOn = true;
+    const soundBtn = document.getElementById('soundBtn');
+    soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundOn = !soundOn;
+      if (master) master.gain.value = soundOn ? 0.8 : 0;
+      soundBtn.setAttribute('aria-pressed', String(soundOn));
+      soundBtn.textContent = soundOn ? '♪ 소리 켬' : '♪ 소리 끔';
+    });
+
+    function ensureAudio() {
+      if (!actx) {
+        actx = new (window.AudioContext || window.webkitAudioContext)();
+        master = actx.createGain();
+        master.gain.value = soundOn ? 0.8 : 0;
+        master.connect(actx.destination);
+      }
+      if (actx.state === 'suspended') actx.resume();
+    }
+
+    function tone(time, freq, len, type, vol) {
+      const o = actx.createOscillator();
+      const g = actx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(freq, time);
+      g.gain.setValueAtTime(vol, time);
+      g.gain.exponentialRampToValueAtTime(0.0001, time + len);
+      o.connect(g).connect(master);
+      o.start(time);
+      o.stop(time + len + 0.02);
+    }
+
+    function kick(time) {
+      const o = actx.createOscillator();
+      const g = actx.createGain();
+      o.frequency.setValueAtTime(140, time);
+      o.frequency.exponentialRampToValueAtTime(45, time + 0.18);
+      g.gain.setValueAtTime(0.5, time);
+      g.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
+      o.connect(g).connect(master);
+      o.start(time);
+      o.stop(time + 0.25);
+    }
+
+    let noiseBuf = null;
+    function hat(time) {
+      if (!noiseBuf) {
+        noiseBuf = actx.createBuffer(1, actx.sampleRate * 0.05, actx.sampleRate);
+        const d = noiseBuf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      }
+      const s = actx.createBufferSource();
+      const f = actx.createBiquadFilter();
+      const g = actx.createGain();
+      s.buffer = noiseBuf;
+      f.type = 'highpass';
+      f.frequency.value = 7000;
+      g.gain.setValueAtTime(0.12, time);
+      g.gain.exponentialRampToValueAtTime(0.0001, time + 0.04);
+      s.connect(f).connect(g).connect(master);
+      s.start(time);
+    }
+
+    // 멜로디: 칸에 닿는 순간마다 한 음씩 (펜타토닉이라 어떤 순서도 잘 어울려요)
+    const SCALE = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5];
+    const MELODY = [0, 2, 4, 3, 2, 4, 5, 4, 3, 2, 1, 2, 3, 4, 2, 0];
+    const BASS = [130.81, 110.0, 174.61, 196.0];
+
+    let events = [];
+    function buildEvents() {
+      events = [];
+      for (let b = 0; b * BEAT < SONG_END; b++) {
+        const t = b * BEAT;
+        events.push({ t, f: () => {} , kind: 'kick' });
+        events.push({ t: t + BEAT / 2, kind: 'hat' });
+        if (b % 4 === 0) events.push({ t, kind: 'bass', freq: BASS[(b / 4) % BASS.length] });
+        if (b < COUNT_IN) events.push({ t, kind: 'count', freq: b === COUNT_IN - 1 ? 1318.5 : 987.8 });
+      }
+      for (let i = 1; i < N; i++) {
+        events.push({ t: hitTime[i], kind: 'note', freq: SCALE[MELODY[(i - 1) % MELODY.length]] });
+      }
+      events.sort((a, b) => a.t - b.t);
+    }
+
+    let nextEvent = 0;
+    function scheduleAudio() {
+      const now = actx.currentTime - startAt;
+      while (nextEvent < events.length && events[nextEvent].t < now + 0.12) {
+        const e = events[nextEvent++];
+        const at = startAt + e.t;
+        if (at < actx.currentTime) continue;
+        if (e.kind === 'kick') kick(at);
+        else if (e.kind === 'hat') hat(at);
+        else if (e.kind === 'bass') tone(at, e.freq, BEAT * 3.5, 'triangle', 0.12);
+        else if (e.kind === 'count') tone(at, e.freq, 0.08, 'square', 0.06);
+        else if (e.kind === 'note') tone(at, e.freq, 0.35, 'triangle', 0.16);
+      }
+    }
+
+    // ───────── 🎮 게임 상태 ─────────
+    const canvas = document.getElementById('stage');
+    const ctx = canvas.getContext('2d');
+    const barFill = document.getElementById('barFill');
+    const progressText = document.getElementById('progressText');
+    const startScreen = document.getElementById('startScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const live = document.getElementById('live');
+
+    let playing = false;
+    let startAt = 0;
+    let pivot = 0;             // 지금 중심이 된 칸
+    let fireIsPivot = true;    // 불 행성이 중심인지
+    let counts, popups, cam, skyColor, lastSign;
+
+    function resetState() {
+      pivot = 0;
+      fireIsPivot = true;
+      counts = { perfect: 0, good: 0, close: 0, miss: 0 };
+      popups = [];
+      cam = { x: tiles[0].x, y: tiles[0].y };
+      skyColor = SKIES[0];
+      lastSign = SIGNS[0];
+      updateProgress();
+    }
+    resetState();
+
+    function now() {
+      return playing ? actx.currentTime - startAt : 0;
+    }
+
+    function start() {
+      if (playing) return;
+      ensureAudio();
+      document.activeElement?.blur();
+      resetState();
+      buildEvents();
+      nextEvent = 0;
+      startAt = actx.currentTime + 0.15;
+      playing = true;
+      startScreen.hidden = true;
+      resultScreen.hidden = true;
+      live.textContent = '시작! 네 박자를 센 뒤 첫 칸이에요.';
+    }
+
+    function finish() {
+      playing = false;
+      const total = N - 1;
+      const acc = Math.round((counts.perfect * 100 + counts.good * 75 + counts.close * 40) / total);
+      document.getElementById('accuracy').textContent = acc + '%';
+      document.getElementById('rPerfect').textContent = counts.perfect;
+      document.getElementById('rGood').textContent = counts.good;
+      document.getElementById('rClose').textContent = counts.close;
+      document.getElementById('rMiss').textContent = counts.miss;
+      resultScreen.hidden = false;
+      document.getElementById('againBtn').focus();
+      live.textContent = '끝! 정확도 ' + acc + '퍼센트.';
+    }
+
+    function quitToStart() {
+      playing = false;
+      if (actx) actx.suspend().then(() => actx.resume());
+      resultScreen.hidden = true;
+      startScreen.hidden = false;
+      resetState();
+      document.getElementById('startBtn').focus();
+    }
+
+    function updateProgress() {
+      const p = Math.round(pivot / (N - 1) * 100);
+      barFill.style.width = p + '%';
+      progressText.textContent = p + '%';
+    }
+
+    function advance(label, color) {
+      pivot++;
+      fireIsPivot = !fireIsPivot;
+      const t = tiles[pivot];
+      popups.push({ text: label, color, x: t.x, y: t.y, life: 0.8 });
+      updateProgress();
+      if (SIGNS[pivot]) {
+        lastSign = SIGNS[pivot];
+        live.textContent = SIGNS[pivot];
+        skyColor = SKIES[Object.keys(SIGNS).indexOf(String(pivot)) % SKIES.length];
+      }
+      if (pivot >= N - 1) setTimeout(finish, 900);
+    }
+
+    // 박자 맞추기
+    function press() {
+      if (!playing || pivot >= N - 1) return;
+      const d = now() - hitTime[pivot + 1];
+      if (d < -WINDOW) {
+        const t = tiles[pivot];
+        popups.push({ text: '너무 빨라!', color: '#ffb36b', x: t.x, y: t.y, life: 0.6 });
+        return;
+      }
+      if (d > WINDOW) return;
+      tone(actx.currentTime, 1567.98, 0.05, 'square', 0.05);
+      const a = Math.abs(d);
+      if (a <= 0.06) { counts.perfect++; advance('완벽!', '#9dff8a'); }
+      else if (a <= 0.12) { counts.good++; advance('좋아!', '#ffe08a'); }
+      else { counts.close++; advance(d < 0 ? '빨라' : '늦어', '#ffb36b'); }
+    }
+
+    // 입력: 아무 키, 클릭, 터치
+    document.addEventListener('keydown', (e) => {
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'Tab') return;
+      if (e.key === 'Escape') { if (playing || !resultScreen.hidden) quitToStart(); return; }
+      if (!playing) {
+        if (!startScreen.hidden && (e.key === ' ' || e.key === 'Enter') && document.activeElement?.id !== 'soundBtn') { e.preventDefault(); start(); }
+        return;
+      }
+      e.preventDefault();
+      press();
+    });
+    canvas.addEventListener('pointerdown', (e) => { e.preventDefault(); press(); });
+    document.getElementById('startBtn').addEventListener('click', start);
+    document.getElementById('againBtn').addEventListener('click', start);
+
+    // ───────── 🎨 그리기 ─────────
+    let W = 0, H = 0, UNIT = 60, dpr = 1;
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      UNIT = Math.max(46, Math.min(80, Math.min(W, H) / 7));
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // 별 배경 (한 번만 만들어 두기)
+    const STARS = Array.from({ length: 120 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.4 + 0.3, p: Math.random() * 6 }));
+
+    // 게임 좌표(위가 +) → 화면 좌표
+    const sx = (x) => W / 2 + (x - cam.x) * UNIT;
+    const sy = (y) => H / 2 - (y - cam.y) * UNIT;
+
+    function planetPos(t) {
+      // 움직이는 행성의 각도: 다음 칸 방향 + 남은 시간만큼 (시계 방향)
+      const seg = Math.min(pivot, N - 2);
+      const outDeg = dirs[seg];
+      const ang = (outDeg * Math.PI / 180) + (hitTime[seg + 1] - t) * Math.PI / BEAT;
+      const c = tiles[pivot];
+      return { x: c.x + Math.cos(ang), y: c.y + Math.sin(ang) };
+    }
+
+    function drawPlanet(x, y, color, glow, r) {
+      ctx.save();
+      ctx.shadowColor = glow;
+      ctx.shadowBlur = 22;
+      const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.35, r * 0.1, x, y, r);
+      g.addColorStop(0, '#ffffff');
+      g.addColorStop(0.35, color);
+      g.addColorStop(1, color);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    let lastFrame = performance.now();
+    let shownSky = SKIES[0];
+
+    function lerpColor(a, b, k) {
+      const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+      const ch = (s) => [(s >> 16) & 255, (s >> 8) & 255, s & 255];
+      const [ar, ag, ab] = ch(pa), [br, bg, bb] = ch(pb);
+      const mix = (u, v) => Math.round(u + (v - u) * k);
+      return '#' + [mix(ar, br), mix(ag, bg), mix(ab, bb)].map(v => v.toString(16).padStart(2, '0')).join('');
+    }
+
+    function frame(ts) {
+      const dt = Math.min((ts - lastFrame) / 1000, 0.05);
+      lastFrame = ts;
+      const t = playing ? now() : (ts / 1000) % (2 * BEAT) + hitTime[1] - 2 * BEAT;
+
+      if (playing) {
+        scheduleAudio();
+        // 시간 안에 못 누르면 '놓침'으로 넘어가요
+        while (pivot < N - 1 && t - hitTime[pivot + 1] > WINDOW) {
+          counts.miss++;
+          advance('놓침', '#ff7a7a');
+        }
+      }
+
+      // 카메라는 중심 칸을 부드럽게 따라가요
+      const target = tiles[pivot];
+      cam.x += (target.x - cam.x) * Math.min(1, dt * 5);
+      cam.y += (target.y - cam.y) * Math.min(1, dt * 5);
+      shownSky = lerpColor(shownSky, skyColor, Math.min(1, dt * 2));
+      document.body.style.background = shownSky;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const bg = ctx.createLinearGradient(0, 0, 0, H);
+      bg.addColorStop(0, shownSky);
+      bg.addColorStop(1, '#05060f');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      // 반짝이는 별
+      STARS.forEach(s => {
+        const px = ((s.x * W - cam.x * UNIT * 0.15) % W + W) % W;
+        const py = ((s.y * H + cam.y * UNIT * 0.15) % H + H) % H;
+        ctx.globalAlpha = 0.35 + 0.35 * Math.sin(ts / 700 + s.p);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(px, py, s.r, s.r);
+      });
+      ctx.globalAlpha = 1;
+
+      // 길
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = UNIT * 0.5;
+      ctx.beginPath();
+      tiles.forEach((p, i) => i ? ctx.lineTo(sx(p.x), sy(p.y)) : ctx.moveTo(sx(p.x), sy(p.y)));
+      ctx.stroke();
+
+      // 칸
+      const size = UNIT * 0.62;
+      tiles.forEach((p, i) => {
+        const x = sx(p.x), y = sy(p.y);
+        if (x < -UNIT || x > W + UNIT || y < -UNIT || y > H + UNIT) return;
+        const done = i <= pivot;
+        const next = i === pivot + 1;
+        ctx.fillStyle = done ? 'rgba(255, 224, 138, 0.9)' : SIGNS[i] ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.22)';
+        ctx.beginPath();
+        ctx.roundRect(x - size / 2, y - size / 2, size, size, size * 0.22);
+        ctx.fill();
+        if (next) {
+          ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      });
+
+      // 표지판 글씨
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      Object.entries(SIGNS).forEach(([i, text]) => {
+        const p = tiles[i];
+        const x = sx(p.x), y = sy(p.y) - UNIT * 0.55;
+        if (x < -W || x > 2 * W) return;
+        const near = Math.abs(i - pivot);
+        ctx.globalAlpha = near < 1 ? 1 : Math.max(0.35, 1 - near * 0.08);
+        ctx.font = `900 ${Math.round(UNIT * 0.36)}px 'Gothic A1', sans-serif`;
+        const tw = ctx.measureText(text).width;
+        const th = UNIT * 0.36;
+        ctx.fillStyle = 'rgba(5, 6, 15, 0.72)';
+        ctx.beginPath();
+        ctx.roundRect(x - tw / 2 - 12, y - th - 10, tw + 24, th + 14, 10);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(text, x, y);
+      });
+      ctx.globalAlpha = 1;
+
+      // 행성
+      const c = tiles[pivot];
+      const m = pivot < N - 1 ? planetPos(t) : { x: c.x + 1, y: c.y };
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(sx(c.x), sy(c.y), UNIT, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(sx(c.x), sy(c.y));
+      ctx.lineTo(sx(m.x), sy(m.y));
+      ctx.stroke();
+      const r = UNIT * 0.2;
+      const fire = ['#ff5a36', 'rgba(255,90,54,0.9)'];
+      const ice = ['#4cc3ff', 'rgba(76,195,255,0.9)'];
+      const [pc, mc] = fireIsPivot ? [fire, ice] : [ice, fire];
+      drawPlanet(sx(c.x), sy(c.y), pc[0], pc[1], r);
+      drawPlanet(sx(m.x), sy(m.y), mc[0], mc[1], r);
+
+      // 판정 글씨
+      popups.forEach(p => {
+        p.life -= dt;
+        ctx.globalAlpha = Math.max(0, p.life / 0.8);
+        ctx.font = `900 ${Math.round(UNIT * 0.32)}px 'Gothic A1', sans-serif`;
+        ctx.textBaseline = 'top';
+        const py = sy(p.y) + UNIT * 0.45 + (0.8 - p.life) * -20;
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'rgba(5, 6, 15, 0.85)';
+        ctx.strokeText(p.text, sx(p.x), py);
+        ctx.fillStyle = p.color;
+        ctx.fillText(p.text, sx(p.x), py);
+      });
+      popups = popups.filter(p => p.life > 0);
+      ctx.globalAlpha = 1;
+
+      // 시작 전 숫자 세기
+      if (playing && t < hitTime[1]) {
+        const left = Math.ceil((hitTime[1] - t) / BEAT);
+        ctx.font = `900 ${Math.round(UNIT * 1.2)}px 'Gothic A1', sans-serif`;
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(left <= COUNT_IN - 1 ? String(left) : '준비', W / 2, H * 0.24);
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
