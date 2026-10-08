@@ -409,6 +409,148 @@
     .final.lose .big-emoji { animation: pop .5s ease-out, wobble 1s ease-in-out .5s infinite; }
     @keyframes wobble { 50% { transform: rotate(-8deg); } }
 
+    /* ───────── 🔥 연승 + ⏱️ 스피드 모드 줄 ───────── */
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .streak, .speed-toggle {
+      font-family: var(--font-pixel);
+      font-size: .95rem;
+      color: var(--ink);
+      background: #fff;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 14px;
+      box-shadow: 0 4px 0 var(--line);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .streak small { font-size: .75rem; color: var(--lilac); }
+    .streak small b { font-weight: normal; }
+    .streak.hot {
+      color: #fff;
+      background: linear-gradient(90deg, #ff5f3a, #ffb238, #ff5f3a) 0 0 / 200% 100%;
+      animation: flame 1.2s linear infinite;
+    }
+    .streak.hot small { color: #fff3c4; }
+    .streak.bump { animation: pop .35s ease-out; }
+    .streak.hot.bump { animation: pop .35s ease-out, flame 1.2s linear infinite; }
+    @keyframes flame { to { background-position: -200% 0; } }
+
+    .speed-toggle { cursor: pointer; transition: transform .08s, box-shadow .08s; }
+    .speed-toggle .state {
+      font-size: .75rem;
+      background: #e9e3f3;
+      border-radius: 6px;
+      padding: 1px 6px;
+    }
+    .speed-toggle[aria-checked="true"] { background: var(--sky); }
+    .speed-toggle[aria-checked="true"] .state { background: var(--ink); color: var(--yellow); }
+    .speed-toggle:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+    .speed-toggle:focus-visible { outline: 4px dashed var(--pink); outline-offset: 3px; }
+
+    /* 카운트다운 (스피드 모드일 때 안내 문구 대신 보임) */
+    .timer { display: none; }
+    .cabinet.speed .subtitle { display: none; }
+    .cabinet.speed .timer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 360px;
+      margin: 0 auto 22px;
+      font-family: var(--font-pixel);
+    }
+    .timer-num {
+      min-width: 2.6em;
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--sky);
+      -webkit-text-stroke: 1.5px var(--line);
+      paint-order: stroke fill;
+    }
+    .timer-num.bump { animation: pop .3s ease-out; }
+    .timer-track {
+      flex: 1;
+      height: 18px;
+      background: #eef2fb;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .timer-bar {
+      height: 100%;
+      background: repeating-linear-gradient(-45deg, var(--mint) 0 8px, #6fe8c6 8px 16px);
+      transform-origin: left;
+    }
+    .timer.hurry .timer-num { color: #ff4d6d; }
+    .timer.hurry .timer-bar { background: repeating-linear-gradient(-45deg, #ff4d6d 0 8px, #ff7b93 8px 16px); }
+    .timer.hurry .timer-track { animation: shake .3s infinite; }
+
+    /* 🤖 수다쟁이 컴퓨터 말풍선 */
+    .talk { display: flex; align-items: center; gap: 10px; max-width: 100%; }
+    .talk .bot { font-size: 2rem; line-height: 1; }
+    .bubble {
+      position: relative;
+      font-family: var(--font-round);
+      font-size: 1.05rem;
+      text-align: left;
+      background: #fff;
+      border: 3px solid var(--line);
+      border-radius: 14px;
+      padding: 6px 12px;
+      animation: pop .35s ease-out .15s backwards;
+    }
+    .bubble::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 50%;
+      margin-top: -7px;
+      border: 7px solid transparent;
+      border-right: 10px solid var(--line);
+      border-left: 0;
+    }
+
+    /* 🔥 연승 배너 */
+    .banner {
+      position: absolute;
+      left: 50%;
+      top: 44%;
+      z-index: 3;
+      pointer-events: none;
+      font-family: var(--font-pixel);
+      text-align: center;
+      white-space: nowrap;
+      background: var(--ink);
+      border: 4px solid var(--yellow);
+      border-radius: 18px;
+      box-shadow: 0 0 0 4px var(--line), 0 0 40px rgba(255, 120, 40, .7);
+      padding: 12px 24px 10px;
+      transform: translate(-50%, -50%) rotate(-4deg);
+      animation: banner 1.3s ease-out forwards;
+    }
+    .banner .big {
+      display: block;
+      font-size: clamp(1.8rem, 8vw, 2.8rem);
+      color: #ffb238;
+      text-shadow: 3px 3px 0 #ff4d2e;
+    }
+    .banner .small { display: block; color: #fff; font-size: 1rem; margin-top: 4px; }
+    @keyframes banner {
+      0%   { transform: translate(-50%, -50%) scale(0) rotate(-20deg); opacity: 0; }
+      15%  { transform: translate(-50%, -50%) scale(1.2) rotate(-4deg); opacity: 1; }
+      25%  { transform: translate(-50%, -50%) scale(1) rotate(-4deg); }
+      80%  { transform: translate(-50%, -50%) scale(1) rotate(-4deg); opacity: 1; }
+      100% { transform: translate(-50%, -80%) scale(.9) rotate(-4deg); opacity: 0; }
+    }
+
     /* 🔊 소리 켜기/끄기 */
     .mute {
       position: absolute;
@@ -433,6 +575,9 @@
     @media (max-width: 420px) {
       .cabinet { padding: 22px 14px 26px; border-radius: 22px; }
       .lights { gap: 8px; }
+      .status-row { gap: 6px; }
+      .streak, .speed-toggle { font-size: .8rem; padding: 4px 9px; gap: 5px; }
+      .streak small, .speed-toggle .state { font-size: .68rem; }
       .mute { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 1rem; }
       .choices { gap: 10px; }
       .choice { border-radius: 18px; padding: 14px 4px 12px; }
@@ -462,7 +607,22 @@
       <span class="side">컴퓨터</span>
     </div>
     <p class="goal">★ 먼저 3점 내면 최종 승리 ★</p>
+
+    <div class="status-row">
+      <div class="streak" id="streak">
+        <span id="streak-text">0연승</span>
+        <small>최고 <b id="best">0</b></small>
+      </div>
+      <button class="speed-toggle" type="button" id="speed" role="switch" aria-checked="false">
+        ⏱️ 스피드 모드 <span class="state">OFF</span>
+      </button>
+    </div>
+
     <p class="subtitle">▶ 하나를 골라 주세요 ◀</p>
+    <div class="timer" id="timer" aria-hidden="true">
+      <span class="timer-num" id="timer-num">준비</span>
+      <div class="timer-track"><div class="timer-bar" id="timer-bar"></div></div>
+    </div>
 
     <section class="choices" aria-label="가위바위보 선택">
       <button class="choice scissors" type="button" data-choice="scissors">
@@ -592,6 +752,13 @@
         tone(N.E4, .96, .9, { type: 'triangle', vol: .16, slide: 200 });
       },
       coin() { tone(N.B5, 0, .08, { vol: .08 }); tone(N.E6, .08, .3, { vol: .08 }); },
+      tick(sec) { tone(sec === 1 ? N.E6 : N.A5, 0, .06, { type: 'triangle', vol: .14 }); },
+      buzz() { tone(150, 0, .45, { type: 'sawtooth', vol: .08 }); tone(155, 0, .45, { type: 'square', vol: .05 }); },
+      fire() {
+        tone(220, 0, .35, { type: 'sawtooth', vol: .05, slide: 880 });
+        noise(.05, .35, .12);
+        [N.E5, N.G5, N.B5, N.E6].forEach((f, i) => tone(f, .3 + i * .06, .12, { vol: .07 }));
+      },
     };
 
     function setMuted(m) {
@@ -703,8 +870,174 @@
       celebrateTimers = shots.map(([t, fn]) => setTimeout(fn, t));
     }
 
+    // ───── 🔥 연승 카운트 ─────
+    const streakEl = document.getElementById('streak');
+    const streakText = document.getElementById('streak-text');
+    const bestEl = document.getElementById('best');
+    let streak = 0;
+    let best = 0;
+    try { best = parseInt(localStorage.getItem('rps-best-streak'), 10) || 0; } catch (e) {}
+    bestEl.textContent = best;
+
+    const FIRE_TIERS = [
+      [10, '👑 가위바위보의 신!'],
+      [7,  '☄️ 전설의 손!'],
+      [5,  '🔥🔥 멈출 수 없다!'],
+      [3,  '🔥 불붙었다!'],
+    ];
+
+    function renderStreak() {
+      streakText.textContent = streak >= 3 ? `🔥 ${streak}연승!` : `${streak}연승`;
+      streakEl.classList.toggle('hot', streak >= 3);
+      bestEl.textContent = best;
+    }
+
+    function showBanner(big, small) {
+      const b = document.createElement('div');
+      b.className = 'banner';
+      b.setAttribute('aria-hidden', 'true');
+      b.innerHTML = `<span class="big">${big}</span><span class="small">${small}</span>`;
+      cabinet.appendChild(b);
+      setTimeout(() => b.remove(), 1300);
+    }
+
+    function addWinToStreak() {
+      streak++;
+      if (streak > best) {
+        best = streak;
+        try { localStorage.setItem('rps-best-streak', String(best)); } catch (e) {}
+      }
+      renderStreak();
+      replay(streakEl, 'bump');
+      const tier = FIRE_TIERS.find(([n]) => streak >= n);
+      if (tier) {
+        showBanner(tier[1], `${streak}연승 중!`);
+        setTimeout(sfx.fire, 250);
+      }
+    }
+
+    // ───── 🤖 수다쟁이 컴퓨터 ─────
+    const LINES = {
+      cpuWin: [
+        '메롱~ 내가 이겼지롱 😜',
+        '역시 나는 천재 컴퓨터야!',
+        '그것밖에 안 돼? 히히',
+        '내 계산은 틀리지 않아 🤓',
+        '삐빅! 승리 확인 완료!',
+        '너무 쉬운데~?',
+        '내 마음을 읽기엔 아직 멀었어!',
+      ],
+      cpuLose: [
+        '으악! 반칙 아니야?! 😤',
+        '방금 건 연습이었어!',
+        '내 회로가 꼬였나…',
+        '다음엔 절대 안 져!',
+        '끄응… 운이 좋았을 뿐이야',
+        '삐-빅… 오류 발생… 분하다!',
+        '한 번만 봐준 거야!',
+      ],
+      draw: [
+        '흥, 따라 하지 마!',
+        '오~ 통했다?',
+        '똑같은 생각이었네!',
+        '다시! 다시!',
+      ],
+      timeout: [
+        '너무 느려~ 잠든 거야? 😴',
+        '시간 끝! 땡~ ⏰',
+        '째깍째깍… 시간은 기다려 주지 않아!',
+        '손이 얼었어? 히히',
+      ],
+      streakBroken: [
+        '드디어 불 껐다! 🧯',
+        '연승 끝~ 내가 끊었지롱!',
+        '불장난은 여기까지야! 💦',
+      ],
+    };
+    let lastLine = '';
+
+    function pickLine(kind) {
+      const pool = LINES[kind].filter(l => l !== lastLine);
+      lastLine = pool[Math.floor(Math.random() * pool.length)];
+      return lastLine;
+    }
+
+    // ───── ⏱️ 스피드 모드 ─────
+    const SPEED_SECONDS = 3;
+    const speedBtn = document.getElementById('speed');
+    const timerEl = document.getElementById('timer');
+    const timerNum = document.getElementById('timer-num');
+    const timerBar = document.getElementById('timer-bar');
+    let speedOn = false;
+    let gameOver = false;
+    let cdRaf = 0, cdNext = 0, cdDeadline = 0, cdLastSec = 0;
+
+    function stopCountdown() {
+      cancelAnimationFrame(cdRaf);
+      clearTimeout(cdNext);
+      cdRaf = 0;
+      timerEl.classList.remove('hurry');
+    }
+
+    // delay 뒤에 3초 카운트다운 시작 (그 사이엔 "준비")
+    function queueCountdown(delay) {
+      stopCountdown();
+      if (!speedOn || gameOver) return;
+      timerNum.textContent = '준비';
+      timerBar.style.transform = 'scaleX(1)';
+      cdNext = setTimeout(startCountdown, delay);
+    }
+
+    function startCountdown() {
+      stopCountdown();
+      if (!speedOn || gameOver) return;
+      cdDeadline = performance.now() + SPEED_SECONDS * 1000;
+      cdLastSec = 0;
+      tickCountdown();
+    }
+
+    function tickCountdown() {
+      const left = cdDeadline - performance.now();
+      if (left <= 0) {
+        stopCountdown();
+        timerNum.textContent = '0';
+        timerBar.style.transform = 'scaleX(0)';
+        playRound(null); // 시간 초과 = 자동 패배
+        return;
+      }
+      const sec = Math.ceil(left / 1000);
+      if (sec !== cdLastSec) {
+        cdLastSec = sec;
+        timerNum.textContent = sec;
+        replay(timerNum, 'bump');
+        timerEl.classList.toggle('hurry', sec === 1);
+        sfx.tick(sec);
+      }
+      timerBar.style.transform = `scaleX(${left / (SPEED_SECONDS * 1000)})`;
+      cdRaf = requestAnimationFrame(tickCountdown);
+    }
+
+    function setSpeed(on) {
+      speedOn = on;
+      speedBtn.setAttribute('aria-checked', String(on));
+      speedBtn.querySelector('.state').textContent = on ? 'ON' : 'OFF';
+      cabinet.classList.toggle('speed', on);
+      if (on) queueCountdown(900);
+      else stopCountdown();
+    }
+    speedBtn.addEventListener('click', () => { sfx.click(); setSpeed(!speedOn); });
+
+    // 다른 탭에 갔다 오면 억울하게 지지 않도록 다시 준비부터
+    document.addEventListener('visibilitychange', () => {
+      if (!speedOn || gameOver) return;
+      if (document.hidden) stopCountdown();
+      else queueCountdown(900);
+    });
+
+    // ───── 게임 진행 ─────
     function resetGame() {
       score = { me: 0, cpu: 0 };
+      gameOver = false;
       scoreMeEl.textContent = 0;
       scoreCpuEl.textContent = 0;
       result.innerHTML = '';
@@ -714,58 +1047,82 @@
       choiceBtns.forEach(b => b.disabled = false);
       choiceBtns[0].focus();
       sfx.coin();
+      queueCountdown(1000);
     }
     againBtn.addEventListener('click', resetGame);
 
     function judge(me, cpu) {
+      if (me === null) return 'lose'; // 시간 초과
       if (me === cpu) return 'draw';
       return HANDS[me].beats === cpu ? 'win' : 'lose';
     }
 
-    document.querySelectorAll('.choice').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const me = btn.dataset.choice;
-        const keys = Object.keys(HANDS);
-        const cpu = keys[Math.floor(Math.random() * keys.length)];
-        const outcome = judge(me, cpu);
+    // me: 'scissors' | 'rock' | 'paper' | null(시간 초과)
+    function playRound(me) {
+      stopCountdown();
+      const keys = Object.keys(HANDS);
+      const cpu = keys[Math.floor(Math.random() * keys.length)];
+      const outcome = judge(me, cpu);
+      const timedOut = me === null;
+      const myHand = timedOut ? { emoji: '⏰', name: '시간 초과' } : HANDS[me];
+      const verdict = timedOut ? '시간 초과! 졌다… ⏰' : VERDICTS[outcome];
 
-        result.innerHTML = `
-          <div class="faceoff">
-            <div class="hand me">
-              <span class="who">나</span>
-              <span class="big" aria-hidden="true">${HANDS[me].emoji}</span>
-              <span class="who">${HANDS[me].name}</span>
-            </div>
-            <span class="vs">VS</span>
-            <div class="hand cpu">
-              <span class="who">컴퓨터</span>
-              <span class="big" aria-hidden="true">${HANDS[cpu].emoji}</span>
-              <span class="who">${HANDS[cpu].name}</span>
-            </div>
+      let line;
+      if (timedOut) line = pickLine('timeout');
+      else if (outcome === 'lose' && streak >= 3) line = pickLine('streakBroken');
+      else line = pickLine(outcome === 'win' ? 'cpuLose' : outcome === 'lose' ? 'cpuWin' : 'draw');
+
+      result.innerHTML = `
+        <div class="faceoff">
+          <div class="hand me">
+            <span class="who">나</span>
+            <span class="big" aria-hidden="true">${myHand.emoji}</span>
+            <span class="who">${myHand.name}</span>
           </div>
-          <div class="verdict ${outcome}">${VERDICTS[outcome]}</div>
-        `;
+          <span class="vs">VS</span>
+          <div class="hand cpu">
+            <span class="who">컴퓨터</span>
+            <span class="big" aria-hidden="true">${HANDS[cpu].emoji}</span>
+            <span class="who">${HANDS[cpu].name}</span>
+          </div>
+        </div>
+        <div class="verdict ${outcome}">${verdict}</div>
+        <div class="talk">
+          <span class="bot" aria-hidden="true">🤖</span>
+          <span class="bubble">${line}</span>
+        </div>
+      `;
 
-        sfx.click();
-        sfx[outcome]();
+      if (timedOut) sfx.buzz();
+      else sfx.click();
+      sfx[outcome]();
 
-        if (outcome === 'win') {
-          bump(scoreMeEl, ++score.me);
-          burstFrom(result.querySelector('.verdict'), 36, 1);
-          burstFrom(scoreMeEl, 14, .5);
-          replay(cabinet, 'flash-win');
-        }
-        if (outcome === 'lose') {
-          bump(scoreCpuEl, ++score.cpu);
-          replay(cabinet, 'shake');
-        }
+      if (outcome === 'win') {
+        bump(scoreMeEl, ++score.me);
+        burstFrom(result.querySelector('.verdict'), 36, 1);
+        burstFrom(scoreMeEl, 14, .5);
+        replay(cabinet, 'flash-win');
+        addWinToStreak();
+      }
+      if (outcome === 'lose') {
+        bump(scoreCpuEl, ++score.cpu);
+        replay(cabinet, 'shake');
+        streak = 0;
+        renderStreak();
+      }
 
-        if (score.me >= WIN_SCORE || score.cpu >= WIN_SCORE) {
-          // 마지막 판 결과를 잠깐 보여준 뒤 최종 화면
-          choiceBtns.forEach(b => b.disabled = true);
-          setTimeout(showFinal, 900);
-        }
-      });
+      if (score.me >= WIN_SCORE || score.cpu >= WIN_SCORE) {
+        // 마지막 판 결과를 잠깐 보여준 뒤 최종 화면
+        gameOver = true;
+        choiceBtns.forEach(b => b.disabled = true);
+        setTimeout(showFinal, 900);
+      } else {
+        queueCountdown(1600); // 결과를 읽을 시간 주고 다음 카운트다운
+      }
+    }
+
+    choiceBtns.forEach(btn => {
+      btn.addEventListener('click', () => playRound(btn.dataset.choice));
     });
   </script>
 </body>
