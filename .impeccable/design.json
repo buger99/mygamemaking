@@ -1,0 +1,568 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T07:32:34+00:00",
+  "title": "Design System: 가위바위보! Arcade Cabinet",
+  "extensions": {
+    "colorMeta": {
+      "cab": {
+        "role": "primary",
+        "displayName": "Pac-Man Cabinet Yellow",
+        "canonical": "oklch(87.1% 0.174 91.3)",
+        "tonalRamp": [
+          "#100a00",
+          "#2f2400",
+          "#514001",
+          "#765e05",
+          "#9d7f0a",
+          "#c6a11a",
+          "#f1c41e",
+          "#ffeebd"
+        ]
+      },
+      "cab-deep": {
+        "role": "primary",
+        "displayName": "Cabinet Shadow Gold",
+        "canonical": "oklch(78.1% 0.161 82.9)",
+        "tonalRamp": [
+          "#110a00",
+          "#322200",
+          "#553e06",
+          "#7d5b01",
+          "#a67a03",
+          "#d19b12",
+          "#fcbe2e",
+          "#ffecca"
+        ]
+      },
+      "marquee": {
+        "role": "secondary",
+        "displayName": "Lit Marquee Red",
+        "canonical": "oklch(59.3% 0.224 29.0)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4c0302",
+          "#7f0906",
+          "#b90002",
+          "#ea2d23",
+          "#ff7463",
+          "#feb4a8",
+          "#ffe9e5"
+        ]
+      },
+      "wall": {
+        "role": "secondary",
+        "displayName": "Maze Wall Blue",
+        "canonical": "oklch(51.6% 0.271 269.3)",
+        "tonalRamp": [
+          "#030033",
+          "#0f0376",
+          "#1f09c0",
+          "#3038f7",
+          "#5272fd",
+          "#82a0fc",
+          "#b4c8fe",
+          "#e8eeff"
+        ]
+      },
+      "deck": {
+        "role": "secondary",
+        "displayName": "Control Deck Blue",
+        "canonical": "oklch(47.6% 0.255 268.7)",
+        "tonalRamp": [
+          "#020133",
+          "#0d0575",
+          "#1d0ebf",
+          "#2e40ee",
+          "#5173fc",
+          "#81a0fb",
+          "#b4c8fd",
+          "#e8eefe"
+        ]
+      },
+      "yellow": {
+        "role": "tertiary",
+        "displayName": "Power Pellet Yellow",
+        "canonical": "oklch(90.9% 0.165 97.6)",
+        "tonalRamp": [
+          "#0f0b00",
+          "#2c2501",
+          "#4d4203",
+          "#716109",
+          "#968211",
+          "#bfa402",
+          "#e7c926",
+          "#fef0aa"
+        ]
+      },
+      "red": {
+        "role": "tertiary",
+        "displayName": "Blinky Red",
+        "canonical": "oklch(65.5% 0.231 26.4)",
+        "tonalRamp": [
+          "#1f0001",
+          "#4d0004",
+          "#80010c",
+          "#b70617",
+          "#ed232b",
+          "#fd746a",
+          "#fdb4ab",
+          "#ffe9e6"
+        ]
+      },
+      "pink": {
+        "role": "tertiary",
+        "displayName": "Pinky Pink",
+        "canonical": "oklch(85.9% 0.095 345.9)",
+        "tonalRamp": [
+          "#1c0011",
+          "#420a2f",
+          "#642a4d",
+          "#874a6d",
+          "#ab6b8e",
+          "#d18db2",
+          "#f7b0d6",
+          "#ffe7f3"
+        ]
+      },
+      "cyan": {
+        "role": "tertiary",
+        "displayName": "Inky Cyan",
+        "canonical": "oklch(85.7% 0.135 208.7)",
+        "tonalRamp": [
+          "#000e11",
+          "#022b30",
+          "#064b54",
+          "#0f6e7a",
+          "#1992a2",
+          "#11bace",
+          "#32e1f8",
+          "#cef7fe"
+        ]
+      },
+      "orange": {
+        "role": "tertiary",
+        "displayName": "Clyde Orange",
+        "canonical": "oklch(82.1% 0.149 72.1)",
+        "tonalRamp": [
+          "#130900",
+          "#352000",
+          "#5c3a01",
+          "#855604",
+          "#b0740a",
+          "#dd9319",
+          "#ffba5e",
+          "#ffebd4"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Cabinet Ink",
+        "canonical": "oklch(20.0% 0.051 289.9)",
+        "tonalRamp": [
+          "#0c061f",
+          "#25203c",
+          "#413d5b",
+          "#605d7c",
+          "#817e9f",
+          "#a4a0c3",
+          "#c8c4e9",
+          "#eeecff"
+        ]
+      },
+      "screen": {
+        "role": "neutral",
+        "displayName": "CRT Navy",
+        "canonical": "oklch(19.9% 0.087 272.6)",
+        "tonalRamp": [
+          "#04022e",
+          "#181f4e",
+          "#333d70",
+          "#515d92",
+          "#717fb7",
+          "#92a2dc",
+          "#b8c7fd",
+          "#e9eefe"
+        ]
+      },
+      "metal": {
+        "role": "neutral",
+        "displayName": "Coin-Door Steel",
+        "canonical": "oklch(86.7% 0.017 271.2)",
+        "tonalRamp": [
+          "#090b12",
+          "#22252e",
+          "#3e424b",
+          "#5d616b",
+          "#7e828d",
+          "#a1a5b0",
+          "#c5c9d5",
+          "#eaeefa"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Phosphor White",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "dim": {
+        "role": "neutral",
+        "displayName": "Dim Phosphor",
+        "canonical": "oklch(78.8% 0.108 278.4)",
+        "tonalRamp": [
+          "#080030",
+          "#1d1958",
+          "#37397a",
+          "#54599e",
+          "#747bc2",
+          "#969ee8",
+          "#bdc5fd",
+          "#eaedff"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Marquee title and final-screen headline; 44px on the 11px Galmuri ladder, dropping to 33px on short or narrow screens."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Round verdicts and the streak banner."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Idle prompt, long verdicts, long banners, the ready state."
+      },
+      "digits-xl": {
+        "displayName": "Digits XL",
+        "purpose": "The speed-mode countdown digit in the arena."
+      },
+      "digits-lg": {
+        "displayName": "Digits LG",
+        "purpose": "HUD scores, tabular."
+      },
+      "digits-md": {
+        "displayName": "Digits MD",
+        "purpose": "The VS mark."
+      },
+      "digits-sm": {
+        "displayName": "Digits SM",
+        "purpose": "Best record, ON/OFF lamps, final score, GAME OVER."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Ghost dialog line, HUD labels, switch labels, banner sub-lines."
+      },
+      "label-button": {
+        "displayName": "Button Label",
+        "purpose": "White captions under the arcade buttons with a 2px hard ink drop."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Dim secondary lines on the CRT: goal and best-record caption."
+      }
+    },
+    "shadows": [
+      {
+        "name": "dome-skirt",
+        "value": "0 0 0 6px #10178f, 0 9px 0 6px #16112b",
+        "purpose": "Arcade button well ring and solid ink skirt at rest."
+      },
+      {
+        "name": "dome-skirt-pressed",
+        "value": "0 0 0 6px #10178f, 0 3px 0 6px #16112b",
+        "purpose": "Arcade button pressed, paired with translateY(6px)."
+      },
+      {
+        "name": "marquee-trim",
+        "value": "inset 0 0 0 3px #ffe14a",
+        "purpose": "Lit inner edge of the marquee sign."
+      },
+      {
+        "name": "ink-ring",
+        "value": "0 0 0 2px #16112b",
+        "purpose": "Outline ring on marquee bulbs and pixel sparks."
+      },
+      {
+        "name": "logo-extrusion",
+        "value": "-3px 0 #16112b, 3px 0 #16112b, 0 -3px #16112b, 0 3px #16112b, -3px -3px #16112b, 3px 3px #16112b, -3px 3px #16112b, 3px -3px #16112b, 5px 6px 0 #16112b",
+        "purpose": "Text-shadow for the marquee title only: eight-way ink outline plus hard drop."
+      },
+      {
+        "name": "caption-drop",
+        "value": "2px 2px 0 #16112b",
+        "purpose": "Text-shadow on white captions set on deck blue."
+      },
+      {
+        "name": "scanlines",
+        "value": "linear-gradient(rgba(255,255,255,.045) 50%, transparent 50%) 0 0 / 100% 4px",
+        "purpose": "Hard-stop CRT scanline overlay (background, not shadow)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "bulb-chase",
+        "value": "1.2s steps(1) infinite (0.3s in party mode)",
+        "purpose": "Marquee bulbs, three phase offsets."
+      },
+      {
+        "name": "dome-press",
+        "value": "transform .06s steps(1), box-shadow .06s steps(1)",
+        "purpose": "Arcade button press."
+      },
+      {
+        "name": "sprite-land",
+        "value": ".3s steps(3)",
+        "purpose": "Hand sprite lands from 1.3x to 1x."
+      },
+      {
+        "name": "blink3",
+        "value": ".45s to .5s steps(1)",
+        "purpose": "Score change and verdict pop."
+      },
+      {
+        "name": "blink-slow",
+        "value": "1s steps(1) infinite",
+        "purpose": "Idle prompt."
+      },
+      {
+        "name": "wall-flash",
+        "value": ".9s steps(1)",
+        "purpose": "CRT walls flash white on a win."
+      },
+      {
+        "name": "hurt-flash",
+        "value": ".45s steps(1)",
+        "purpose": "CRT glass flashes maroon on a loss."
+      },
+      {
+        "name": "banner",
+        "value": "1.3s steps(1) forwards",
+        "purpose": "Streak banner blinks in, holds, clears."
+      },
+      {
+        "name": "hop",
+        "value": "1s steps(2) infinite",
+        "purpose": "Final trophy hop."
+      },
+      {
+        "name": "rainbow",
+        "value": "1s steps(1) infinite",
+        "purpose": "Win headline cycles yellow, pink, cyan, orange."
+      },
+      {
+        "name": "spark-burst",
+        "value": "1.2s to 2.2s steps(16) forwards",
+        "purpose": "Square pixel sparks, travel snapped to 4px."
+      },
+      {
+        "name": "shake",
+        "value": ".4s steps(8)",
+        "purpose": "Cabinet shake on a loss."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none; transition: none",
+        "purpose": "All motion off under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "max-width: 359px"
+      },
+      {
+        "name": "wide",
+        "value": "min-width: 600px"
+      },
+      {
+        "name": "short-wide",
+        "value": "min-width: 600px and max-height: 780px"
+      },
+      {
+        "name": "cabinet-max",
+        "value": "460px"
+      }
+    ],
+    "spritePalette": {
+      "K": "#16112b",
+      "S": "#ffd29a",
+      "H": "#e39a5b",
+      "W": "#ffffff",
+      "R": "#ff3b3b",
+      "B": "#2b39e8",
+      "P": "#ffb8ae",
+      "N": "#1d2bd1",
+      "G": "#ffcf1a",
+      "D": "#c98a00",
+      "O": "#ff8a1a",
+      "Y": "#ffe14a",
+      "E": "#2121de"
+    },
+    "fonts": [
+      {
+        "family": "Galmuri11",
+        "src": "fonts/Galmuri11.woff2",
+        "license": "OFL",
+        "role": "Hangul"
+      },
+      {
+        "family": "Press Start 2P",
+        "src": "fonts/PressStart2P.woff2",
+        "license": "OFL",
+        "role": "Digits and Latin"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Arcade Button",
+      "kind": "button",
+      "refersTo": "arcade-button-scissors",
+      "description": "Round dome with ink skirt on the control deck; one per hand, colored red, yellow or pink.",
+      "html": "<div class=\"ds-deck\"><button class=\"ds-choice\" type=\"button\"><span class=\"ds-dome\"></span><span class=\"ds-label\">가위</span></button><button class=\"ds-choice ds-rock\" type=\"button\"><span class=\"ds-dome\"></span><span class=\"ds-label\">바위</span></button><button class=\"ds-choice ds-paper\" type=\"button\"><span class=\"ds-dome\"></span><span class=\"ds-label\">보</span></button></div>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-deck{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:18px 10px 14px;background:var(--deck,#2b39e8);border:4px solid var(--ink,#16112b);border-radius:6px}.ds-choice{--c:var(--red,#ff3b3b);--c-hi:#ff8a8a;--c-lo:#b3141a;font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:22px;color:#fff}.ds-rock{--c:var(--yellow,#ffe14a);--c-hi:#fff3a6;--c-lo:#c99a00}.ds-paper{--c:var(--pink,#ffb8de);--c-hi:#ffe2f1;--c-lo:#d77aa9}.ds-dome{width:84px;aspect-ratio:1;border-radius:50%;position:relative;background:radial-gradient(circle at 50% 34%,var(--c) 0 60%,var(--c-lo) 60.5%);border:4px solid var(--ink,#16112b);box-shadow:0 0 0 6px #10178f,0 9px 0 6px var(--ink,#16112b);transition:transform .06s steps(1),box-shadow .06s steps(1)}.ds-dome::before{content:\"\";position:absolute;left:20%;top:16%;width:18%;height:14%;background:var(--c-hi)}.ds-label{font-size:1.05rem;text-shadow:2px 2px 0 var(--ink,#16112b)}.ds-choice:hover .ds-dome{filter:brightness(1.08)}.ds-choice:active .ds-dome{transform:translateY(6px);box-shadow:0 0 0 6px #10178f,0 3px 0 6px var(--ink,#16112b)}.ds-choice:focus-visible{outline:none}.ds-choice:focus-visible .ds-dome{outline:4px dashed #fff;outline-offset:10px}"
+    },
+    {
+      "name": "Coin-Door Switch",
+      "kind": "button",
+      "refersTo": "coin-door-switch",
+      "description": "Steel toggle with an ink lamp reading ON/OFF in Press Start 2P.",
+      "html": "<div class=\"ds-door\"><button class=\"ds-switch\" type=\"button\" role=\"switch\" aria-checked=\"false\">스피드 모드 <span class=\"ds-lamp\">OFF</span></button><button class=\"ds-switch\" type=\"button\" aria-pressed=\"false\">소리 <span class=\"ds-lamp ds-on\">ON</span></button></div>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-door{display:grid;grid-template-columns:3fr 2fr;gap:10px;padding:10px;background:var(--metal,#cfd3df);border:4px solid var(--ink,#16112b);border-radius:6px}.ds-switch{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:.95rem;color:var(--ink,#16112b);background:#e8ebf3;border:3px solid var(--ink,#16112b);border-radius:4px;padding:9px 8px;min-height:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}.ds-lamp{font-family:var(--font-arcade, 'Press Start 2P', 'Galmuri11', monospace);font-size:16px;padding:4px 5px;background:var(--ink,#16112b);color:#8d93a8}.ds-lamp.ds-on{color:var(--yellow,#ffe14a)}.ds-switch:active{transform:translateY(2px)}.ds-switch:focus-visible{outline:4px dashed var(--ink,#16112b);outline-offset:3px}"
+    },
+    {
+      "name": "Restart Button",
+      "kind": "button",
+      "refersTo": "again-button",
+      "description": "Square yellow 다시 하기 button on the final screen.",
+      "html": "<div class=\"ds-crt-mini\"><button class=\"ds-again\" type=\"button\">다시 하기</button></div>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-crt-mini{background:var(--screen,#0b0e3c);padding:20px;text-align:center}.ds-again{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:1.15rem;color:var(--ink,#16112b);background:var(--yellow,#ffe14a);border:3px solid #fff;padding:12px 26px;cursor:pointer}.ds-again:hover{background:#fff}.ds-again:active{transform:translateY(2px)}.ds-again:focus-visible{outline:4px dashed var(--pink,#ffb8de);outline-offset:4px}"
+    },
+    {
+      "name": "Marquee",
+      "kind": "custom",
+      "refersTo": "marquee",
+      "description": "Red lit sign with yellow trim, chasing square bulbs and the outlined pixel title.",
+      "html": "<header class=\"ds-marquee\"><div class=\"ds-bulbs\"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><h1 class=\"ds-title\">가위바위보!</h1><div class=\"ds-bulbs\"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></header>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-marquee{background:var(--marquee,#e5261d);border:4px solid var(--ink,#16112b);box-shadow:inset 0 0 0 3px var(--yellow,#ffe14a);padding:8px 10px 10px;text-align:center}.ds-bulbs{display:flex;justify-content:space-between;padding:0 4px}.ds-bulbs span{width:8px;height:8px;background:var(--yellow,#ffe14a);box-shadow:0 0 0 2px var(--ink,#16112b);animation:ds-chase 1.2s steps(1) infinite}.ds-bulbs span:nth-child(3n+2){animation-delay:-.4s}.ds-bulbs span:nth-child(3n+3){animation-delay:-.8s}@keyframes ds-chase{0%,66%{background:#ffe14a}67%,100%{background:#fff}}.ds-title{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:44px;line-height:1.15;letter-spacing:.02em;font-weight:normal;color:var(--yellow,#ffe14a);margin:6px 0 8px;text-shadow:-3px 0 #16112b,3px 0 #16112b,0 -3px #16112b,0 3px #16112b,-3px -3px #16112b,3px 3px #16112b,-3px 3px #16112b,3px -3px #16112b,5px 6px 0 #16112b}"
+    },
+    {
+      "name": "CRT Screen with HUD",
+      "kind": "card",
+      "refersTo": "crt-screen",
+      "description": "Ink bezel, navy glass in a double maze-blue wall with scanlines; HUD scores in Press Start 2P, verdict in Galmuri11.",
+      "html": "<section class=\"ds-bezel\"><div class=\"ds-screen\"><div class=\"ds-hud\"><div class=\"ds-side\"><span class=\"ds-hl\">나</span><span class=\"ds-num ds-me\">2</span></div><div class=\"ds-mid\">최고 <b>3</b>연승</div><div class=\"ds-side ds-cpu\"><span class=\"ds-hl\">컴퓨터</span><span class=\"ds-num ds-cpun\">1</span></div></div><p class=\"ds-vs\">VS</p><p class=\"ds-verdict\">이겼다!</p></div></section>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-bezel{background:var(--ink,#16112b);padding:8px;border-radius:6px}.ds-screen{position:relative;background:var(--screen,#0b0e3c);color:#fff;border:3px solid var(--wall,#3442ff);outline:3px solid var(--wall,#3442ff);outline-offset:-9px;border-radius:10px;padding:16px 16px 14px;overflow:hidden;display:flex;flex-direction:column;gap:10px}.ds-screen::after{content:\"\";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.045) 50%,transparent 50%) 0 0/100% 4px;pointer-events:none}.ds-hud{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:8px}.ds-side{display:flex;flex-direction:column;gap:6px}.ds-cpu{align-items:flex-end}.ds-hl{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:.95rem;color:var(--pink,#ffb8de)}.ds-cpu .ds-hl{color:var(--cyan,#3ee8ff)}.ds-num{font-family:var(--font-arcade, 'Press Start 2P', 'Galmuri11', monospace);font-size:32px;line-height:1;font-variant-numeric:tabular-nums}.ds-me{color:var(--yellow,#ffe14a)}.ds-cpun{color:var(--cyan,#3ee8ff)}.ds-mid{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:.8rem;color:var(--dim,#aab3ff);text-align:center}.ds-mid b{font-family:var(--font-arcade, 'Press Start 2P', 'Galmuri11', monospace);font-weight:normal;font-size:16px;color:#fff}.ds-vs{font-family:var(--font-arcade, 'Press Start 2P', 'Galmuri11', monospace);font-size:24px;color:var(--red,#ff3b3b);text-align:center}.ds-verdict{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:33px;line-height:1.2;height:44px;display:flex;align-items:center;justify-content:center;color:var(--yellow,#ffe14a)}"
+    },
+    {
+      "name": "Ghost Dialog",
+      "kind": "custom",
+      "refersTo": "ghost-dialog",
+      "description": "White-framed dialog with the red ghost sprite beside the computer line.",
+      "html": "<div class=\"ds-glass\"><div class=\"ds-dialog\"><svg class=\"ds-ghost\" viewBox=\"0 0 14 13\" width=\"42\" height=\"39\" shape-rendering=\"crispEdges\" aria-hidden=\"true\"><path fill=\"#16112b\" d=\"M5 0h4v1H5zM3 1h2v1H3zM9 1h2v1H9zM2 2h1v1H2zM11 2h1v1h-1zM1 3h1v3H1zM12 3h1v3h-1zM0 6h1v7H0zM13 6h1v7h-1zM4 11h1v2H4zM9 11h1v2H9zM2 12h1v1H2zM6 12h1v1H6zM10 12h1v1h-1zM12 12h1v1h-1z\"/><path fill=\"#ff3b3b\" d=\"M5 1h4v1H5zM3 2h8v1H3zM2 3h10v3H2zM1 6h12v5H1zM1 11h3v1H1zM5 11h4v1H5zM10 11h3v1h-3zM1 12h1v1H1zM5 12h1v1H5zM9 12h1v1H9z\"/><path fill=\"#fff\" d=\"M3 3h2v1H3zM8 3h2v1H8zM2 4h4v4H2zM7 4h4v4H7z\"/><path fill=\"#2121de\" d=\"M3 5h2v2H3zM8 5h2v2H8z\"/></svg><p class=\"ds-line\">덤벼 봐! 나는 컴퓨터 유령이야</p></div></div>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-glass{background:var(--screen,#0b0e3c);padding:16px}.ds-dialog{display:flex;align-items:center;gap:12px;border:3px solid #fff;border-radius:4px;padding:8px 12px;min-height:4.2em;color:#fff}.ds-ghost{flex:none;image-rendering:pixelated}.ds-line{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:.95rem;line-height:1.45;margin:0}"
+    },
+    {
+      "name": "Streak Banner",
+      "kind": "custom",
+      "refersTo": "banner",
+      "description": "Navy plaque with an orange frame and ink outline, blinking in over the CRT for streaks.",
+      "html": "<div class=\"ds-glass2\"><div class=\"ds-banner\"><span class=\"ds-big\">3연승!</span><span class=\"ds-small\">불타는 중</span></div></div>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-glass2{background:var(--screen,#0b0e3c);padding:24px;display:flex;justify-content:center}.ds-banner{background:var(--screen,#0b0e3c);border:4px solid var(--orange,#ffb347);outline:4px solid var(--ink,#16112b);padding:12px 18px;text-align:center;font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);animation:ds-banner 1.3s steps(1) infinite}.ds-big{display:block;font-size:33px;color:var(--orange,#ffb347)}.ds-small{display:block;color:#fff;font-size:.95rem;margin-top:6px}@keyframes ds-banner{0%{opacity:0}8%{opacity:1}16%{opacity:0}24%,85%{opacity:1}100%{opacity:0}}"
+    },
+    {
+      "name": "Final Screen",
+      "kind": "custom",
+      "refersTo": "final-screen",
+      "description": "Full-CRT end screen; win headline cycles ghost colors in steps, loss shows cyan headline and red GAME OVER.",
+      "html": "<div class=\"ds-final\"><h2 class=\"ds-h2\">최종 승리!</h2><p class=\"ds-score\"><span class=\"ds-ko\">나</span> 3 : 1 <span class=\"ds-ko\">컴퓨터</span></p><button class=\"ds-again2\" type=\"button\">다시 하기</button></div>",
+      "css": ":host{--ink:#16112b;--cab:#ffcf1a;--marquee:#e5261d;--screen:#0b0e3c;--wall:#3442ff;--deck:#2b39e8;--metal:#cfd3df;--white:#fff;--yellow:#ffe14a;--red:#ff3b3b;--pink:#ffb8de;--cyan:#3ee8ff;--orange:#ffb347;--dim:#aab3ff;}.ds-final{background:var(--screen,#0b0e3c);color:#fff;display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px;text-align:center}.ds-h2{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:44px;line-height:1.15;font-weight:normal;margin:0;animation:ds-rainbow 1s steps(1) infinite}@keyframes ds-rainbow{0%{color:#ffe14a}25%{color:#ffb8de}50%{color:#3ee8ff}75%{color:#ffb347}}.ds-score{font-family:var(--font-arcade, 'Press Start 2P', 'Galmuri11', monospace);font-size:16px;line-height:1.6;margin:0}.ds-ko{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:1rem}.ds-again2{font-family:var(--font-ko, 'Galmuri11', 'Press Start 2P', monospace);font-size:1.15rem;color:#16112b;background:#ffe14a;border:3px solid #fff;padding:12px 26px;cursor:pointer}.ds-again2:hover{background:#fff}.ds-again2:focus-visible{outline:4px dashed #ffb8de;outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Cabinet in Your Pocket",
+    "overview": "\n**Creative North Star: \"The Cabinet in Your Pocket\"**\n\nThe phone is the front of an early-80s arcade cabinet in the Pac-Man, Galaga and Donkey Kong line. The page stacks the way the machine does. A red marquee with chasing bulbs sits on top, a navy CRT screen framed in maze-blue walls fills the middle, a blue control deck with three round arcade buttons sits in the thumb zone, and a steel coin door holds the switches. The cabinet body behind everything is Pac-Man yellow, with a faint maze-and-dots side-art tiled across it.\n\nEverything is made of pixels and ink. Objects have solid ink outlines. Shadows are hard and unblurred. Sprites (hands, the ghost CPU, trophy, flame) are drawn on canvas from character maps and enlarged only by whole numbers. Motion jumps from frame to frame with `steps()` the way old hardware does; nothing eases. The world stays bright. The only dark surface is the CRT glass, and it is navy rather than black, so the game reads as a lit cabinet in a bright room and never as something dark or scary.",
+    "keyCharacteristics": [
+      "Yellow cabinet body, red lit marquee, navy CRT, blue deck, steel coin door, stacked top to bottom.",
+      "Ink outlines on every object; hard, zero-blur shadows only.",
+      "Two pixel faces: Galmuri11 for Hangul, Press Start 2P for digits and Latin.",
+      "Canvas pixel sprites at integer scales only.",
+      "Every animation and transition is stepped.",
+      "Ghost colors (red, pink, cyan, orange) plus power-pellet yellow are the accent voice."
+    ],
+    "rules": [
+      {
+        "name": "The Lit Cabinet Rule",
+        "body": "The cabinet is bright and the CRT is the only dark surface. Dark navy lives inside the bezel and nowhere else.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ghost Sides Rule",
+        "body": "The player's side speaks in pink and yellow, and the computer's side speaks in cyan. Keep that split on every surface that shows both sides.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Outline Rule",
+        "body": "Every object on the cabinet has a solid ink edge: 4px on cabinet panels and domes, 3px on inner frames and switches, 2px rings on bulbs and sparks.",
+        "section": "colors"
+      },
+      {
+        "name": "The Script Split Rule",
+        "body": "Hangul is set in Galmuri11, and digits and Latin are set in Press Start 2P. A mixed line switches face per run (e.g. 최고 **0** 연승), and neither face is bolded.",
+        "section": "typography"
+      },
+      {
+        "name": "The Pixel Ladder Rule",
+        "body": "Display and digit sizes sit on whole-pixel rungs of each face's grid. Press Start 2P uses multiples of 8 (16, 24, 32, 48) and Galmuri11 display uses multiples of 11 (22, 33, 44). To shrink, drop a whole rung (44 to 33), never to an in-between size. Reading copy (body and label) is the one exception: it uses rem sizes so it scales with the user's text setting.",
+        "section": "typography"
+      },
+      {
+        "name": "The Fixed Arena Rule",
+        "body": "Everything that changes per round (sprites, countdown, verdict, dialog line) lives in a fixed-height slot. The deck and coin door never move when a result appears.",
+        "section": "layout"
+      },
+      {
+        "name": "The Hard Edge Rule",
+        "body": "Every shadow, ring and gradient stop has zero blur. A gradient is allowed only as a hard-stop pixel fill (scanlines, the dome's highlight disc), never as a soft fade or glow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Integer Sprite Rule",
+        "body": "Canvas sprites are drawn one character per pixel and displayed at `width = columns × scale` with `image-rendering: pixelated`. Scale is always a whole number (×2 streak flame, ×3 dome hands, dialog ghost and banner flame, ×4 to ×5 arena hands, ×8 final trophy or ghost). Sprites 8 columns wide or narrower are drawn at double columns first. A fractional scale is never allowed.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Steps-Only Rule",
+        "body": "Every animation and transition uses `steps()`. Bulbs chase in `steps(1)` at 1.2s (0.3s in party mode), domes press in `.06s steps(1)`, sprites land in `steps(3)`, scores and verdicts blink with `steps(1)`, the final trophy hops in `steps(2)`, sparks fly in `steps(16)`, and the cabinet shakes in `steps(8)`. `prefers-reduced-motion` turns off every animation and transition.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** outline every new object in ink: 4px on panels and domes, 3px on inner frames, 2px rings on small pixel bits.",
+      "**Do** set Hangul in Galmuri11 and digits and Latin in Press Start 2P, at regular weight, on the 8px and 11px ladders (16/24/32/48 and 22/33/44).",
+      "**Do** draw new imagery as canvas pixel sprites from the shared palette, scaled by whole numbers only.",
+      "**Do** animate with `steps()` and respect `prefers-reduced-motion` by switching animation off.",
+      "**Do** put new per-round content into fixed-height slots on the CRT so the deck never moves.",
+      "**Do** keep the player's side pink and yellow and the computer's side cyan."
+    ],
+    "donts": [
+      "**Don't** blur anything: no soft box-shadows, glows, or smooth gradients. Hard-stop fills and zero-blur offsets only.",
+      "**Don't** ease motion with `ease`, `linear` tweening or cubic-bezier curves.",
+      "**Don't** use emoji, icon fonts or system glyphs as imagery. Hands, ghost, trophy and flame are pixel sprites.",
+      "**Don't** darken the cabinet. Navy belongs to the CRT glass, and the page never goes black.",
+      "**Don't** scale sprites by fractional amounts or let the browser smooth them.",
+      "**Don't** bold either pixel face or set display and digit text at sizes between ladder rungs."
+    ]
+  }
+}
