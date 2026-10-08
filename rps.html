@@ -188,6 +188,7 @@
     .streak-now.hot { color: var(--orange); }
 
     .goal { font-size: .8rem; color: var(--dim); text-align: center; }
+    .goal.speed { color: var(--orange); }
 
     /* 대결 무대: 높이 고정이라 버튼이 움직이지 않음 */
     .arena {
@@ -510,7 +511,7 @@
             <span class="hud-num cpu" id="score-cpu">0</span>
           </div>
         </div>
-        <p class="goal">먼저 3점 내면 최종 승리</p>
+        <p class="goal" id="goal">먼저 3점 내면 최종 승리</p>
 
         <div class="arena">
           <figure class="slot me">
@@ -545,6 +546,7 @@
     </section>
 
     <p class="sr-only" id="announce" aria-live="polite"></p>
+    <p class="sr-only" id="timer-announce" aria-live="assertive"></p>
 
     <section class="deck" aria-label="가위바위보 선택">
       <button class="choice scissors" type="button" data-choice="scissors">
@@ -562,11 +564,12 @@
     </section>
 
     <footer class="coin-door">
-      <button class="switch" type="button" id="speed" role="switch" aria-checked="false">
-        스피드 모드 <span class="lamp" id="speed-lamp">OFF</span>
+      <button class="switch" type="button" id="speed" role="switch" aria-checked="false" aria-describedby="speed-help">
+        스피드 모드 <span class="lamp" id="speed-lamp" aria-hidden="true">OFF</span>
+        <span class="sr-only" id="speed-help">켜면 판마다 3초 안에 골라야 해요. 못 고르면 져요. 게임 중에 켜면 다음 게임부터 적용돼요.</span>
       </button>
       <button class="switch" type="button" id="mute" aria-pressed="false">
-        소리 <span class="lamp" id="mute-lamp">ON</span>
+        소리 <span class="lamp" id="mute-lamp" aria-hidden="true">ON</span>
       </button>
     </footer>
   </main>
@@ -1100,6 +1103,9 @@
       if (!speedOn || gameOver) return;
       cdDeadline = performance.now() + SPEED_SECONDS * 1000;
       cdLastSec = 0;
+      // 같은 문장도 판마다 다시 읽히도록 비웠다가 채움
+      timerAnnounce.textContent = '';
+      setTimeout(() => { timerAnnounce.textContent = `${SPEED_SECONDS}초 안에 고르세요!`; }, 50);
       tickCountdown();
     }
 
@@ -1118,19 +1124,53 @@
         timerBar.classList.toggle('hurry', sec === 1);
         sfx.tick(sec);
       }
-      timerBar.style.transform = `scaleX(${left / (SPEED_SECONDS * 1000)})`;
+      // 막대도 8비트식으로 칸칸이 줄어듦 (1초에 4칸)
+      const cells = SPEED_SECONDS * 4;
+      timerBar.style.transform = `scaleX(${Math.ceil(left / 1000 * 4) / cells})`;
       cdRaf = requestAnimationFrame(tickCountdown);
+    }
+
+    const goalEl = document.getElementById('goal');
+    const timerAnnounce = document.getElementById('timer-announce');
+    let speedPending = false; // 게임 중에 켜면 다음 게임부터
+    let roundsPlayed = 0;
+
+    function renderSpeed() {
+      speedBtn.setAttribute('aria-checked', String(speedOn));
+      document.getElementById('speed-lamp').textContent = speedOn ? 'ON' : speedPending ? 'NEXT' : 'OFF';
+      cabinet.classList.toggle('speed', speedOn);
+      goalEl.classList.toggle('speed', speedOn || speedPending);
+      goalEl.textContent = speedOn ? '3초 안에 골라요! 못 고르면 짐'
+        : speedPending ? '다음 게임부터 스피드 모드!'
+        : '먼저 3점 내면 최종 승리';
     }
 
     function setSpeed(on) {
       speedOn = on;
-      speedBtn.setAttribute('aria-checked', String(on));
-      document.getElementById('speed-lamp').textContent = on ? 'ON' : 'OFF';
-      cabinet.classList.toggle('speed', on);
-      if (on) queueCountdown(900);
+      speedPending = false;
+      renderSpeed();
+      if (on) queueCountdown(1400);
       else stopCountdown();
     }
-    speedBtn.addEventListener('click', () => { sfx.click(); setSpeed(!speedOn); });
+
+    speedBtn.addEventListener('click', () => {
+      sfx.click();
+      if (speedOn) {
+        setSpeed(false);
+        announceEl.textContent = '스피드 모드 꺼짐';
+      } else if (speedPending) {
+        speedPending = false;
+        renderSpeed();
+        announceEl.textContent = '스피드 모드 예약 취소';
+      } else if (roundsPlayed === 0) {
+        setSpeed(true);
+        announceEl.textContent = '스피드 모드 켜짐. 3초 안에 골라요! 못 고르면 져요.';
+      } else {
+        speedPending = true;
+        renderSpeed();
+        announceEl.textContent = '스피드 모드는 다음 게임부터 켜져요.';
+      }
+    });
 
     // 다른 탭에 갔다 오면 억울하게 지지 않도록 다시 준비부터
     document.addEventListener('visibilitychange', () => {
@@ -1166,6 +1206,8 @@
 
     function resetGame() {
       score = { me: 0, cpu: 0 };
+      roundsPlayed = 0;
+      if (speedPending) setSpeed(true);
       gameOver = false;
       scoreMeEl.textContent = 0;
       scoreCpuEl.textContent = 0;
@@ -1230,6 +1272,7 @@
     }
 
     function reveal(me, cpu, outcome, timedOut) {
+      roundsPlayed++;
       drawCpu(cpu);
       nameCpu.textContent = HANDS[cpu].name;
       replay(spriteCpu.parentElement, 'land');
