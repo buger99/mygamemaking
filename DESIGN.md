@@ -227,7 +227,7 @@ A bright arcade palette: a saturated yellow body, a red sign, maze blues, the fo
 - **CRT Navy** (screen): the screen glass, the banner fill, and the final screen. Never pure black.
 - **Coin-Door Steel** (metal): the coin-door plate. Its switches sit on a lighter steel face (#e8ebf3).
 - **Phosphor White** (white): primary text on the CRT, dialog frame, and the wall flash.
-- **Dim Phosphor** (dim): secondary text on the CRT (best record line, the first-to-3 goal).
+- **Dim Phosphor** (dim): secondary text on the CRT (best record line, the 5-round goal line).
 
 ### Named Rules
 **The Lit Cabinet Rule.** The cabinet is bright and the CRT is the only dark surface. Dark navy lives inside the bezel and nowhere else.

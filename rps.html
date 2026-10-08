@@ -173,6 +173,8 @@
       gap: 4px;
       padding-bottom: 2px;
     }
+    .round { font-family: var(--font-arcade); font-size: 16px; color: var(--yellow); white-space: nowrap; }
+    .round.last { color: var(--red); }
     .hi { font-size: .8rem; color: var(--dim); }
     .hi b { font-family: var(--font-arcade); font-weight: normal; color: var(--white); font-size: 16px; }
     .streak-now {
@@ -302,6 +304,7 @@
     .final.win h2 { color: var(--yellow); animation: rainbow 1s steps(1) infinite; }
     @keyframes rainbow { 0% { color: var(--yellow); } 25% { color: var(--pink); } 50% { color: var(--cyan); } 75% { color: var(--orange); } }
     .final.lose h2 { color: var(--cyan); }
+    .final.draw h2 { color: var(--white); }
     .final .over { font-family: var(--font-arcade); font-size: 16px; color: var(--red); }
     .final .final-score { font-family: var(--font-arcade); font-size: 16px; line-height: 1.6; }
     .final .final-score .ko { font-family: var(--font-ko); font-size: 1rem; }
@@ -503,6 +506,7 @@
             <span class="hud-num me" id="score-me">0</span>
           </div>
           <div class="hud-mid">
+            <span class="round" id="round">ROUND 1/5</span>
             <span class="hi">최고 <b id="best">0</b>연승</span>
             <span class="streak-now" id="streak"></span>
           </div>
@@ -511,7 +515,7 @@
             <span class="hud-num cpu" id="score-cpu">0</span>
           </div>
         </div>
-        <p class="goal" id="goal">먼저 3점 내면 최종 승리</p>
+        <p class="goal" id="goal">5판 중 더 많이 이기면 승리</p>
 
         <div class="arena">
           <figure class="slot me">
@@ -853,7 +857,7 @@
     });
 
     // ───── 화면 요소 ─────
-    const WIN_SCORE = 3;
+    const TOTAL_ROUNDS = 5; // 비긴 판, 시간 초과도 한 판
     const cabinet = document.getElementById('cabinet');
     const screen = document.getElementById('screen');
     const scoreMeEl = document.getElementById('score-me');
@@ -1135,6 +1139,14 @@
     let speedPending = false; // 게임 중에 켜면 다음 게임부터
     let roundsPlayed = 0;
 
+    const roundEl = document.getElementById('round');
+    function renderRound() {
+      const n = Math.min(roundsPlayed + 1, TOTAL_ROUNDS);
+      roundEl.textContent = `ROUND ${n}/${TOTAL_ROUNDS}`;
+      roundEl.classList.toggle('last', n === TOTAL_ROUNDS);
+      roundEl.setAttribute('aria-label', `${TOTAL_ROUNDS}판 중 ${n}번째 판`);
+    }
+
     function renderSpeed() {
       speedBtn.setAttribute('aria-checked', String(speedOn));
       document.getElementById('speed-lamp').textContent = speedOn ? 'ON' : speedPending ? 'NEXT' : 'OFF';
@@ -1142,7 +1154,7 @@
       goalEl.classList.toggle('speed', speedOn || speedPending);
       goalEl.textContent = speedOn ? '3초 안에 골라요! 못 고르면 짐'
         : speedPending ? '다음 게임부터 스피드 모드!'
-        : '먼저 3점 내면 최종 승리';
+        : '5판 중 더 많이 이기면 승리';
     }
 
     function setSpeed(on) {
@@ -1181,14 +1193,19 @@
 
     // ───── 최종 화면 ─────
     function showFinal() {
-      const won = score.me >= WIN_SCORE;
-      finalEl.className = 'final ' + (won ? 'win' : 'lose');
-      draw(document.getElementById('final-sprite'), won ? 'trophy' : 'ghost');
-      document.getElementById('final-title').textContent = won ? '최종 승리!' : '최종 패배…';
-      document.getElementById('final-over').hidden = won;
+      const result = score.me > score.cpu ? 'win' : score.me < score.cpu ? 'lose' : 'draw';
+      const won = result === 'win';
+      finalEl.className = 'final ' + result;
+      draw(document.getElementById('final-sprite'), { win: 'trophy', lose: 'ghost', draw: 'scared' }[result]);
+      document.getElementById('final-title').textContent = { win: '최종 승리!', lose: '최종 패배…', draw: '무승부!' }[result];
+      document.getElementById('final-over').hidden = result !== 'lose';
       document.getElementById('final-me').textContent = score.me;
       document.getElementById('final-cpu').textContent = score.cpu;
-      document.getElementById('final-cheer').textContent = won ? '축하해! 진짜 챔피언이야!' : '다음엔 이길 거야!';
+      document.getElementById('final-cheer').textContent = {
+        win: '축하해! 진짜 챔피언이야!',
+        lose: '다음엔 이길 거야!',
+        draw: '팽팽했다! 한 번 더 붙어 보자!',
+      }[result];
       finalEl.hidden = false;
       deckEl.inert = true;
       doorEl.inert = true;
@@ -1197,9 +1214,12 @@
         cabinet.classList.add('party');
         celebrate();
         sfx.champion();
-      } else {
+      } else if (result === 'lose') {
         replay(cabinet, 'shake');
         sfx.gameOver();
+      } else {
+        sfx.draw();
+        sfx.coin();
       }
       againBtn.focus();
     }
@@ -1207,6 +1227,7 @@
     function resetGame() {
       score = { me: 0, cpu: 0 };
       roundsPlayed = 0;
+      renderRound();
       if (speedPending) setSpeed(true);
       gameOver = false;
       scoreMeEl.textContent = 0;
@@ -1273,6 +1294,7 @@
 
     function reveal(me, cpu, outcome, timedOut) {
       roundsPlayed++;
+      if (roundsPlayed < TOTAL_ROUNDS) renderRound();
       drawCpu(cpu);
       nameCpu.textContent = HANDS[cpu].name;
       replay(spriteCpu.parentElement, 'land');
@@ -1306,10 +1328,10 @@
 
       const mine = timedOut ? '시간 초과' : HANDS[me].name;
       announceEl.textContent =
-        `나 ${mine}, 컴퓨터 ${HANDS[cpu].name}. ${verdictEl.textContent} 점수 나 ${score.me}, 컴퓨터 ${score.cpu}. ${extra} 컴퓨터: ${line}`;
+        `${roundsPlayed}번째 판. 나 ${mine}, 컴퓨터 ${HANDS[cpu].name}. ${verdictEl.textContent} 점수 나 ${score.me}, 컴퓨터 ${score.cpu}. ${extra} 컴퓨터: ${line}`;
 
       busy = false;
-      if (score.me >= WIN_SCORE || score.cpu >= WIN_SCORE) {
+      if (roundsPlayed >= TOTAL_ROUNDS) {
         // 마지막 판 결과를 잠깐 보여준 뒤 최종 화면
         gameOver = true;
         setTimeout(showFinal, 1300);
