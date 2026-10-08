@@ -52,8 +52,8 @@
       font-family: var(--font-ko);
       color: var(--ink);
       background-color: var(--cab);
-      /* 몸체 옆면: 흐린 미로와 쿠키 점 */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' fill='%23ebb100'%3E%3Crect x='0' y='0' width='24' height='4'/%3E%3Crect x='20' y='0' width='4' height='20'/%3E%3Crect x='40' y='28' width='24' height='4'/%3E%3Crect x='40' y='28' width='4' height='20'/%3E%3Crect x='0' y='44' width='16' height='4'/%3E%3Crect x='12' y='44' width='4' height='12'/%3E%3Crect x='30' y='10' width='4' height='4'/%3E%3Crect x='8' y='24' width='4' height='4'/%3E%3Crect x='52' y='12' width='4' height='4'/%3E%3Crect x='28' y='54' width='4' height='4'/%3E%3Crect x='52' y='54' width='4' height='4'/%3E%3C/svg%3E");
+      /* 몸체 옆면: 이어지는 미로 벽과 쿠키 점 */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cg fill='none' stroke='%23ebb100' stroke-width='4' stroke-linecap='square'%3E%3Cpath d='M0 24H40V56H88V24H128'/%3E%3Cpath d='M24 128V96H64V128'/%3E%3Cpath d='M24 0V8H64V0'/%3E%3Cpath d='M104 40V104H128'/%3E%3Cpath d='M0 104H8V80'/%3E%3C/g%3E%3Cg fill='%23ebb100'%3E%3Crect x='62' y='38' width='4' height='4'/%3E%3Crect x='12' y='40' width='4' height='4'/%3E%3Crect x='116' y='12' width='4' height='4'/%3E%3Crect x='12' y='64' width='4' height='4'/%3E%3Crect x='56' y='76' width='4' height='4'/%3E%3Crect x='84' y='112' width='4' height='4'/%3E%3Crect x='118' y='72' width='4' height='4'/%3E%3Crect x='84' y='80' width='4' height='4'/%3E%3C/g%3E%3C/svg%3E");
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -468,7 +468,7 @@
       h1 { font-size: 33px; margin: 2px 0 4px; }
       .screen { gap: 6px; padding: 10px 16px; }
       .arena { height: 108px; }
-      .slot canvas { --scale: 3; }
+      .slot canvas { --scale: 4; }
       .deck { padding: 12px 10px 8px; }
       .choice { gap: 18px; }
       .choice .dome { width: 76px; }
