@@ -204,6 +204,94 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
+    /* ───────── 🏆 점수판 ───────── */
+    .scoreboard {
+      display: inline-flex;
+      align-items: center;
+      gap: clamp(10px, 3vw, 18px);
+      font-family: var(--font-pixel);
+      background: var(--ink);
+      color: #fff;
+      border-radius: 18px;
+      padding: 10px clamp(16px, 5vw, 28px);
+      margin: 6px 0 14px;
+      box-shadow: inset 0 0 0 3px var(--lilac);
+    }
+    .scoreboard .side { font-size: clamp(1rem, 4vw, 1.25rem); }
+    .scoreboard .num {
+      font-size: clamp(2.2rem, 10vw, 3rem);
+      line-height: 1;
+      min-width: 1.2ch;
+      display: inline-block;
+    }
+    .scoreboard .num.me  { color: var(--yellow); }
+    .scoreboard .num.cpu { color: var(--sky); }
+    .scoreboard .colon { font-size: clamp(1.8rem, 8vw, 2.4rem); color: var(--pink); }
+    .scoreboard .num.bump { animation: pop .35s ease-out; }
+    .goal { font-family: var(--font-pixel); font-size: .8rem; color: var(--lilac); margin-top: -6px; margin-bottom: 18px; }
+
+    .choice:disabled { cursor: not-allowed; filter: grayscale(.6) opacity(.6); transform: none; box-shadow: 0 8px 0 var(--line); }
+
+    /* ───────── 🎊 최종 승리 / 패배 화면 ───────── */
+    .final {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 24px;
+      overflow: hidden;
+      animation: fade .25s ease-out;
+    }
+    .final[hidden] { display: none; }
+    .final .big-emoji { font-size: clamp(4rem, 20vw, 6.5rem); line-height: 1; animation: pop .5s ease-out; }
+    .final h2 {
+      font-family: var(--font-pixel);
+      font-size: clamp(2rem, 9vw, 3.2rem);
+      line-height: 1.15;
+      -webkit-text-stroke: 2px var(--line);
+      paint-order: stroke fill;
+      text-shadow: 4px 4px 0 var(--line);
+      animation: pop .5s ease-out;
+    }
+    .final.win  h2 { color: var(--yellow); }
+    .final.lose h2 { color: var(--sky); }
+    .final .final-score { font-family: var(--font-pixel); font-size: 1.15rem; }
+    .again {
+      font-family: var(--font-pixel);
+      font-size: 1.3rem;
+      color: var(--ink);
+      background: var(--pink);
+      border: 4px solid var(--line);
+      border-radius: 999px;
+      box-shadow: 0 6px 0 var(--line);
+      padding: 10px 28px;
+      margin-top: 6px;
+      cursor: pointer;
+      transition: transform .08s, box-shadow .08s;
+    }
+    .again:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--line); }
+    .again:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--line); }
+    .again:focus-visible { outline: 4px dashed var(--sky); outline-offset: 5px; }
+    @keyframes fade { from { opacity: 0; } }
+
+    /* 축하 꽃가루 */
+    .confetti {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 14px;
+      border: 2px solid var(--line);
+      border-radius: 3px;
+      animation: fall linear forwards;
+      pointer-events: none;
+    }
+    @keyframes fall { to { transform: translateY(var(--drop)) rotate(720deg); } }
+
     @media (max-width: 420px) {
       .cabinet { padding: 22px 14px 26px; border-radius: 22px; }
       .choices { gap: 10px; }
@@ -224,6 +312,15 @@
     </div>
 
     <h1>가위바위보!</h1>
+
+    <div class="scoreboard" role="status" aria-label="점수">
+      <span class="side">나</span>
+      <span class="num me" id="score-me">0</span>
+      <span class="colon">:</span>
+      <span class="num cpu" id="score-cpu">0</span>
+      <span class="side">컴퓨터</span>
+    </div>
+    <p class="goal">★ 먼저 3점 내면 최종 승리 ★</p>
     <p class="subtitle">▶ 하나를 골라 주세요 ◀</p>
 
     <section class="choices" aria-label="가위바위보 선택">
@@ -243,6 +340,14 @@
 
     <!-- 결과 표시 영역 -->
     <div class="result" id="result" aria-live="polite"></div>
+
+    <!-- 최종 승리 / 패배 화면 -->
+    <div class="final" id="final" role="dialog" aria-modal="true" aria-labelledby="final-title" hidden>
+      <div class="big-emoji" id="final-emoji" aria-hidden="true"></div>
+      <h2 id="final-title"></h2>
+      <p class="final-score" id="final-score"></p>
+      <button class="again" type="button" id="again">다시 하기 ↺</button>
+    </div>
   </main>
 
   <script>
@@ -256,7 +361,62 @@
       lose: '졌다… 😭',
       draw: '비겼다 🤝',
     };
+    const WIN_SCORE = 3;
     const result = document.getElementById('result');
+    const scoreMeEl = document.getElementById('score-me');
+    const scoreCpuEl = document.getElementById('score-cpu');
+    const finalEl = document.getElementById('final');
+    const againBtn = document.getElementById('again');
+    const choiceBtns = document.querySelectorAll('.choice');
+    const cabinet = document.querySelector('.cabinet');
+    let score = { me: 0, cpu: 0 };
+
+    function bump(el, value) {
+      el.textContent = value;
+      el.classList.remove('bump');
+      void el.offsetWidth; // 애니메이션 다시 시작
+      el.classList.add('bump');
+    }
+
+    function showFinal() {
+      const won = score.me >= WIN_SCORE;
+      finalEl.className = 'final ' + (won ? 'win' : 'lose');
+      document.getElementById('final-emoji').textContent = won ? '🏆' : '😵';
+      document.getElementById('final-title').textContent = won ? '최종 승리!' : '최종 패배…';
+      document.getElementById('final-score').textContent =
+        `나 ${score.me} : ${score.cpu} 컴퓨터` + (won ? ' 🎉' : ' 다음엔 이길 거야!');
+      finalEl.hidden = false;
+      choiceBtns.forEach(b => b.disabled = true);
+      if (won) confetti();
+      againBtn.focus();
+    }
+
+    function confetti() {
+      const colors = ['--pink', '--yellow', '--mint', '--sky', '--lilac'];
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement('span');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = `var(${colors[i % colors.length]})`;
+        c.style.setProperty('--drop', (cabinet.offsetHeight + 40) + 'px');
+        c.style.animationDuration = (1.4 + Math.random() * 1.4) + 's';
+        c.style.animationDelay = Math.random() * .6 + 's';
+        c.addEventListener('animationend', () => c.remove());
+        finalEl.appendChild(c);
+      }
+    }
+
+    function resetGame() {
+      score = { me: 0, cpu: 0 };
+      scoreMeEl.textContent = 0;
+      scoreCpuEl.textContent = 0;
+      result.innerHTML = '';
+      finalEl.hidden = true;
+      finalEl.querySelectorAll('.confetti').forEach(c => c.remove());
+      choiceBtns.forEach(b => b.disabled = false);
+      choiceBtns[0].focus();
+    }
+    againBtn.addEventListener('click', resetGame);
 
     function judge(me, cpu) {
       if (me === cpu) return 'draw';
@@ -286,6 +446,15 @@
           </div>
           <div class="verdict ${outcome}">${VERDICTS[outcome]}</div>
         `;
+
+        if (outcome === 'win') bump(scoreMeEl, ++score.me);
+        if (outcome === 'lose') bump(scoreCpuEl, ++score.cpu);
+
+        if (score.me >= WIN_SCORE || score.cpu >= WIN_SCORE) {
+          // 마지막 판 결과를 잠깐 보여준 뒤 최종 화면
+          choiceBtns.forEach(b => b.disabled = true);
+          setTimeout(showFinal, 900);
+        }
       });
     });
   </script>
