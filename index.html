@@ -250,6 +250,55 @@
 
     section { display: flex; flex-direction: column; gap: 20px; }
 
+    /* ───────── 🧡 맨 위 환영 배너 ───────── */
+    .welcome-banner {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: 40px 24px 46px;
+      color: #1a0a00;
+      background: linear-gradient(135deg, #ff4e1a 0%, #ff7a18 45%, #ffb347 100%);
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+      box-shadow: 0 12px 40px rgba(255, 122, 24, 0.35);
+      animation: slideDown 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-120%); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    /* 배너 위를 스치는 빛 줄 */
+    .welcome-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
+      transform: translateX(-100%);
+      animation: shine 1.4s ease-out 0.7s both;
+      pointer-events: none;
+    }
+
+    @keyframes shine { to { transform: translateX(100%); } }
+
+    .welcome-banner h2 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2.6rem, 9vw, 4.4rem);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .welcome-banner p {
+      margin-top: 10px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #3d1a00;
+      text-wrap: balance;
+    }
+
     /* ───────── 👋 맨 위 소개 ───────── */
     .hero { --edge: var(--cp-yellow); }
 
@@ -481,56 +530,6 @@
       100% { transform: translate(var(--x), var(--y)) scale(1.2) rotate(540deg); opacity: 0; }
     }
 
-    /* ───────── 🚪 들어올 때 환영 인사 ───────── */
-    .popup.welcome .panel { --edge: var(--cp-cyan); --cut: 24px; }
-
-    .welcome .panel-body {
-      padding: 32px 28px 44px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .welcome-tag {
-      font-family: var(--font-hud);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      color: var(--cp-cyan);
-    }
-
-    .welcome-title {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      line-height: 1.25;
-      color: var(--cp-yellow);
-      text-shadow: 2px 0 0 var(--cp-pink), -2px 0 0 var(--cp-cyan);
-      text-wrap: balance;
-      min-height: 1.25em;
-    }
-
-    .welcome-title .cursor {
-      display: inline-block;
-      width: 0.5em;
-      height: 1em;
-      vertical-align: -0.1em;
-      background: var(--cp-cyan);
-      animation: blink 0.7s steps(1) infinite;
-    }
-
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .welcome-sub {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--ink-dim);
-      text-wrap: balance;
-    }
-
-    .welcome .btn-secondary { margin-top: 6px; }
-
     /* ───────── 👋 반가워! 알림 창 ───────── */
     .popup {
       margin: auto;
@@ -576,6 +575,7 @@
       *, *::before, *::after { animation: none !important; transition: none !important; }
       #rain, .floating, .car, .glitch-bar { display: none; }
       .hobby:hover, .avatar:hover { transform: none; }
+      .welcome-banner { animation: none; opacity: 1; transform: none; }
     }
 
     /* ───────── 📱 휴대폰 화면 ───────── */
@@ -597,6 +597,7 @@
     @media (max-width: 600px) {
       :root { --cut: 16px; }
       .container { padding: 28px 16px 48px; gap: 44px; }
+      .welcome-banner { padding: 30px 18px 36px; }
       .hero .panel-body { flex-direction: column; text-align: center; gap: 12px; padding: 28px 20px 40px; }
       .avatar { font-size: 4.8rem; }
       .hello { font-size: 1.25rem; }
@@ -627,6 +628,12 @@
   </div>
 
   <main class="container">
+
+    <!-- 🧡 환영 배너 -->
+    <header class="welcome-banner">
+      <h2>어서오세요! <span aria-hidden="true">👋</span></h2>
+      <p>정한별의 네온 도시에 오신 걸 환영해요 <span aria-hidden="true">🌆✨</span></p>
+    </header>
 
     <!-- 👋 인사 -->
     <section class="hero panel" aria-label="소개">
@@ -697,19 +704,6 @@
 
     <footer><span aria-hidden="true">💌</span> 방문해 주셔서 고마워요!</footer>
   </main>
-
-  <!-- 🚪 들어올 때 환영 인사 -->
-  <dialog class="popup welcome" id="welcome" aria-labelledby="welcomeTitle">
-    <div class="panel">
-      <div class="panel-body">
-        <div class="welcome-tag" aria-hidden="true">// SYSTEM ONLINE</div>
-        <p class="welcome-title" id="welcomeTitle"><span id="welcomeText"></span><span class="cursor" aria-hidden="true"></span></p>
-        <p class="welcome-sub">정한별의 네온 도시에 오신 걸 환영해요 <span aria-hidden="true">🌆✨</span><br>천천히 둘러보세요!</p>
-        <button class="btn btn-secondary" id="welcomeEnter" type="button">들어가기 <span aria-hidden="true">→</span></button>
-        <span class="tag" aria-hidden="true">WELCOME // 한별</span>
-      </div>
-    </div>
-  </dialog>
 
   <!-- 👋 반가워! 알림 창 -->
   <dialog class="popup" id="popup" aria-labelledby="popupMsg">
@@ -871,25 +865,6 @@
     }
 
     document.getElementById('partyBtn').addEventListener('click', (e) => burstFrom(e, 30));
-
-    // 🚪 페이지에 들어오면 환영 인사가 한 글자씩 나와요
-    const welcome = document.getElementById('welcome');
-    const welcomeText = document.getElementById('welcomeText');
-    const WELCOME_MSG = '어서 오세요! 👋';
-    welcome.querySelector('.welcome-title').setAttribute('aria-label', WELCOME_MSG);
-    document.getElementById('welcomeEnter').addEventListener('click', () => welcome.close());
-    welcome.addEventListener('click', (e) => { if (e.target === welcome) welcome.close(); });
-    welcome.addEventListener('close', () => burst(window.innerWidth / 2, window.innerHeight / 2, 24));
-    welcome.showModal();
-    if (reduceMotion) {
-      welcomeText.textContent = WELCOME_MSG;
-    } else {
-      let i = 0;
-      const typer = setInterval(() => {
-        welcomeText.textContent = [...WELCOME_MSG].slice(0, ++i).join('');
-        if (i >= [...WELCOME_MSG].length) clearInterval(typer);
-      }, 70);
-    }
 
     // 👋 인사 버튼을 누르면 알림 창이 떠요
     const popup = document.getElementById('popup');
