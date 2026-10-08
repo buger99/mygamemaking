@@ -269,7 +269,9 @@ A single centered column (100% up to 460px) on the yellow body, top-anchored wit
 
 Spacing works on a small rhythm of 4, 8, 10, 12 and 16px. The buttons add their own larger gaps (22px dome-to-label, 18px deck top padding) for the physical skirt.
 
-Responsive behavior: at ≥600px wide, arena sprites go from ×4 to ×5. Short wide screens (≥600px wide and ≤780px tall, i.e. laptops and projectors) tighten the stack: title to 33px, arena 108px with sprites back to ×4, domes 76px, smaller deck and coin-door padding. Below 360px wide, the title and final headline drop to 33px.
+Responsive behavior: at ≥600px wide, arena sprites go from ×4 to ×5. Short wide screens (≥600px wide and ≤780px tall, i.e. laptops and projectors) tighten the stack: title to 33px, arena 108px with sprites back to ×4, domes 76px, smaller deck and coin-door padding. Below 360px wide, the title and final headline drop to 33px, and the HUD and coin door drop the words "ROUND" and "모드" so nothing wraps. Short phones (<600px wide and ≤720px tall) tighten the same way: title 33px, arena 100px with sprites at ×3, domes 68px.
+
+Keyboard: 1, 2 and 3 play 가위, 바위 and 보. On devices with a fine pointer and hover (laptops, the presenter's PC) each button label shows its key as a white Press Start 2P keycap with a 2px ink ring; touch phones hide the keycaps.
 
 ### Named Rules
 **The Fixed Arena Rule.** Everything that changes per round (sprites, countdown, verdict, dialog line) lives in a fixed-height slot. The deck and coin door never move when a result appears.
