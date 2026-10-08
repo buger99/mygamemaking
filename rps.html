@@ -409,8 +409,31 @@
     .final.lose .big-emoji { animation: pop .5s ease-out, wobble 1s ease-in-out .5s infinite; }
     @keyframes wobble { 50% { transform: rotate(-8deg); } }
 
+    /* 🔊 소리 켜기/끄기 */
+    .mute {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+      font-size: 1.1rem;
+      line-height: 1;
+      background: #fff;
+      border: 3px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 4px 0 var(--line);
+      cursor: pointer;
+      z-index: 2;
+      transition: transform .08s, box-shadow .08s;
+    }
+    .mute:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+    .mute[aria-pressed="true"] { background: #eee8f7; }
+    .mute:focus-visible { outline: 4px dashed var(--sky); outline-offset: 3px; }
+
     @media (max-width: 420px) {
       .cabinet { padding: 22px 14px 26px; border-radius: 22px; }
+      .lights { gap: 8px; }
+      .mute { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 1rem; }
       .choices { gap: 10px; }
       .choice { border-radius: 18px; padding: 14px 4px 12px; }
       .choice .label { padding: 2px 8px; }
@@ -423,6 +446,7 @@
 </head>
 <body>
   <main class="cabinet">
+    <button class="mute" type="button" id="mute" aria-pressed="false" aria-label="효과음 끄기">🔊</button>
     <div class="lights" aria-hidden="true">
       <span></span><span></span><span></span><span></span><span></span>
       <span></span><span></span><span></span><span></span><span></span>
@@ -483,6 +507,106 @@
       lose: '졌다… 😭',
       draw: '비겼다 🤝',
     };
+    // ───── 🔊 효과음 (Web Audio로 직접 만드는 8비트 소리, 파일 없음) ─────
+    const muteBtn = document.getElementById('mute');
+    let muted = false;
+    try { muted = localStorage.getItem('rps-muted') === '1'; } catch (e) {}
+    let actx = null;
+
+    function ctx() {
+      if (!actx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        actx = new AC();
+      }
+      if (actx.state === 'suspended') actx.resume();
+      return actx;
+    }
+
+    // 삑! 음 하나 (freq Hz, at초 뒤에, dur초 동안)
+    function tone(freq, at = 0, dur = .1, { type = 'square', vol = .1, slide } = {}) {
+      const c = muted ? null : ctx();
+      if (!c) return;
+      const t = c.currentTime + at;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t);
+      if (slide) osc.frequency.exponentialRampToValueAtTime(slide, t + dur);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(vol, t + .01);
+      gain.gain.setValueAtTime(vol, t + dur * .6);
+      gain.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t);
+      osc.stop(t + dur + .02);
+    }
+
+    // 펑! (짧은 잡음)
+    function noise(at = 0, dur = .25, vol = .18) {
+      const c = muted ? null : ctx();
+      if (!c) return;
+      const t = c.currentTime + at;
+      const buf = c.createBuffer(1, Math.floor(c.sampleRate * dur), c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length) ** 2;
+      const src = c.createBufferSource();
+      const filter = c.createBiquadFilter();
+      const gain = c.createGain();
+      src.buffer = buf;
+      filter.type = 'bandpass';
+      filter.frequency.value = 1800;
+      gain.gain.value = vol;
+      src.connect(filter).connect(gain).connect(c.destination);
+      src.start(t);
+    }
+
+    const N = { C4: 262, E4: 330, F4: 349, G4: 392, A4: 440, B4: 494, C5: 523, D5: 587, E5: 659, G5: 784, A5: 880, B5: 988, C6: 1047, E6: 1319 };
+
+    const sfx = {
+      click() { tone(N.A5, 0, .05, { vol: .06 }); },
+      win() {
+        [N.C5, N.E5, N.G5, N.C6].forEach((f, i) => tone(f, i * .07, .1));
+        tone(N.E6, .28, .22, { type: 'triangle', vol: .12 });
+      },
+      lose() {
+        tone(N.G4, 0, .18, { type: 'sawtooth', vol: .07 });
+        tone(N.E4, .17, .45, { type: 'sawtooth', vol: .07, slide: 110 });
+      },
+      draw() {
+        tone(N.A4, 0, .09, { type: 'triangle', vol: .14 });
+        tone(N.A4, .14, .09, { type: 'triangle', vol: .14 });
+      },
+      pop(at = 0) { noise(at, .22, .16); tone(N.C6, at, .06, { type: 'triangle', vol: .05, slide: N.C5 }); },
+      champion() {
+        // 빠-빠-빠-빠아~ 빠라밤!
+        [N.G4, N.C5, N.E5, N.G5].forEach((f, i) => tone(f, i * .13, .12));
+        tone(N.E5, .55, .14);
+        tone(N.G5, .72, .7, { vol: .11 });
+        tone(N.C6, .72, .7, { type: 'triangle', vol: .1 });
+        [N.C5, N.E5, N.G5, N.C6, N.E6].forEach((f, i) => tone(f, 1.5 + i * .06, .14, { vol: .07 }));
+      },
+      gameOver() {
+        // 뿌-뿌-뿌-뿌우우~
+        [N.G4, 370, N.F4].forEach((f, i) => tone(f, i * .32, .26, { type: 'triangle', vol: .16 }));
+        tone(N.E4, .96, .9, { type: 'triangle', vol: .16, slide: 200 });
+      },
+      coin() { tone(N.B5, 0, .08, { vol: .08 }); tone(N.E6, .08, .3, { vol: .08 }); },
+    };
+
+    function setMuted(m) {
+      muted = m;
+      muteBtn.textContent = m ? '🔇' : '🔊';
+      muteBtn.setAttribute('aria-pressed', String(m));
+      muteBtn.setAttribute('aria-label', m ? '효과음 켜기' : '효과음 끄기');
+      try { localStorage.setItem('rps-muted', m ? '1' : '0'); } catch (e) {}
+    }
+    setMuted(muted);
+    muteBtn.addEventListener('click', () => {
+      setMuted(!muted);
+      if (!muted) sfx.click();
+    });
+
     const WIN_SCORE = 3;
     const result = document.getElementById('result');
     const scoreMeEl = document.getElementById('score-me');
@@ -509,8 +633,8 @@
         `나 ${score.me} : ${score.cpu} 컴퓨터` + (won ? ' 🎉' : ' 다음엔 이길 거야!');
       finalEl.hidden = false;
       choiceBtns.forEach(b => b.disabled = true);
-      if (won) celebrate();
-      else replay(cabinet, 'shake');
+      if (won) { celebrate(); sfx.champion(); }
+      else { replay(cabinet, 'shake'); sfx.gameOver(); }
       againBtn.focus();
     }
 
@@ -538,6 +662,7 @@
 
     // (x, y) 지점에서 색종이 펑! angle 방향으로 spread 만큼 퍼짐
     function burst(x, y, count, angle = -90, spread = 360, power = 1) {
+      sfx.pop();
       if (reduceMotion.matches) return;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('span');
@@ -588,6 +713,7 @@
       fxLayer.replaceChildren();
       choiceBtns.forEach(b => b.disabled = false);
       choiceBtns[0].focus();
+      sfx.coin();
     }
     againBtn.addEventListener('click', resetGame);
 
@@ -619,6 +745,9 @@
           </div>
           <div class="verdict ${outcome}">${VERDICTS[outcome]}</div>
         `;
+
+        sfx.click();
+        sfx[outcome]();
 
         if (outcome === 'win') {
           bump(scoreMeEl, ++score.me);
