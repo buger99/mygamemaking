@@ -481,6 +481,56 @@
       100% { transform: translate(var(--x), var(--y)) scale(1.2) rotate(540deg); opacity: 0; }
     }
 
+    /* ───────── 🚪 들어올 때 환영 인사 ───────── */
+    .popup.welcome .panel { --edge: var(--cp-cyan); --cut: 24px; }
+
+    .welcome .panel-body {
+      padding: 32px 28px 44px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .welcome-tag {
+      font-family: var(--font-hud);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--cp-cyan);
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      line-height: 1.25;
+      color: var(--cp-yellow);
+      text-shadow: 2px 0 0 var(--cp-pink), -2px 0 0 var(--cp-cyan);
+      text-wrap: balance;
+      min-height: 1.25em;
+    }
+
+    .welcome-title .cursor {
+      display: inline-block;
+      width: 0.5em;
+      height: 1em;
+      vertical-align: -0.1em;
+      background: var(--cp-cyan);
+      animation: blink 0.7s steps(1) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .welcome-sub {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      text-wrap: balance;
+    }
+
+    .welcome .btn-secondary { margin-top: 6px; }
+
     /* ───────── 👋 반가워! 알림 창 ───────── */
     .popup {
       margin: auto;
@@ -648,6 +698,19 @@
     <footer><span aria-hidden="true">💌</span> 방문해 주셔서 고마워요!</footer>
   </main>
 
+  <!-- 🚪 들어올 때 환영 인사 -->
+  <dialog class="popup welcome" id="welcome" aria-labelledby="welcomeTitle">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="welcome-tag" aria-hidden="true">// SYSTEM ONLINE</div>
+        <p class="welcome-title" id="welcomeTitle"><span id="welcomeText"></span><span class="cursor" aria-hidden="true"></span></p>
+        <p class="welcome-sub">정한별의 네온 도시에 오신 걸 환영해요 <span aria-hidden="true">🌆✨</span><br>천천히 둘러보세요!</p>
+        <button class="btn btn-secondary" id="welcomeEnter" type="button">들어가기 <span aria-hidden="true">→</span></button>
+        <span class="tag" aria-hidden="true">WELCOME // 한별</span>
+      </div>
+    </div>
+  </dialog>
+
   <!-- 👋 반가워! 알림 창 -->
   <dialog class="popup" id="popup" aria-labelledby="popupMsg">
     <div class="panel">
@@ -808,6 +871,25 @@
     }
 
     document.getElementById('partyBtn').addEventListener('click', (e) => burstFrom(e, 30));
+
+    // 🚪 페이지에 들어오면 환영 인사가 한 글자씩 나와요
+    const welcome = document.getElementById('welcome');
+    const welcomeText = document.getElementById('welcomeText');
+    const WELCOME_MSG = '어서 오세요! 👋';
+    welcome.querySelector('.welcome-title').setAttribute('aria-label', WELCOME_MSG);
+    document.getElementById('welcomeEnter').addEventListener('click', () => welcome.close());
+    welcome.addEventListener('click', (e) => { if (e.target === welcome) welcome.close(); });
+    welcome.addEventListener('close', () => burst(window.innerWidth / 2, window.innerHeight / 2, 24));
+    welcome.showModal();
+    if (reduceMotion) {
+      welcomeText.textContent = WELCOME_MSG;
+    } else {
+      let i = 0;
+      const typer = setInterval(() => {
+        welcomeText.textContent = [...WELCOME_MSG].slice(0, ++i).join('');
+        if (i >= [...WELCOME_MSG].length) clearInterval(typer);
+      }, 70);
+    }
 
     // 👋 인사 버튼을 누르면 알림 창이 떠요
     const popup = document.getElementById('popup');
